@@ -15,6 +15,13 @@ import {
   TextField,
   InputAdornment,
   Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+  Snackbar,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -107,6 +114,11 @@ export default function CollapsibleTable() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [isUpdating, setIsUpdating] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteClientId, setDeleteClientId] = useState<number>(0);
+  const [deleteClientName, setDeleteClientName] = useState<string>("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -170,20 +182,42 @@ export default function CollapsibleTable() {
   };
 
   const handleDelete = async (id: number, nome: string) => {
-    const confirmDelete = window.confirm(`Deseja excluir o usuário ${nome}?`);
-    if (confirmDelete) {
+    setDeleteClientId(id);
+    setDeleteClientName(nome);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteDialogOpen(false);
+  };
+
+  const handleConfirmDelete = async () => {
+    setDeleteDialogOpen(false);
+
+    try {
+      await deleteClient(deleteClientId);
+      setSnackbarMessage(
+        `O usuário ${deleteClientName} foi excluído com sucesso!`
+      );
+      setSnackbarOpen(true);
+      fetchData();
+    } catch (error) {
       try {
-        await deleteClient(id);
+        verifyClient(deleteClientId);
+        setSnackbarMessage(
+          `O usuário ${deleteClientName} foi excluído com sucesso!`
+        );
+        setSnackbarOpen(true);
+        fetchData();
       } catch (error) {
-        try {
-          verifyClient(id);
-          alert(`O usuário ${nome} foi exluído com sucesso!.`);
-          fetchData();
-        } catch (error) {
-          alert(`Erro ao deletar usuário ${nome}.`);
-        }
+        setSnackbarMessage(`Erro ao deletar usuário ${deleteClientName}.`);
+        setSnackbarOpen(true);
       }
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   if (isLoading) {
@@ -277,6 +311,31 @@ export default function CollapsibleTable() {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+
+      <Dialog open={deleteDialogOpen} onClose={handleCancelDelete}>
+        <DialogTitle>Confirmar exclusão</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Deseja realmente excluir o cliente {deleteClientName}?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelDelete}>Cancelar</Button>
+          <Button onClick={handleConfirmDelete} autoFocus>
+            Confirmar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message={snackbarMessage}
+        ContentProps={{
+          sx: { backgroundColor: "#43a047" },
+        }}
       />
     </TableContainer>
   );
