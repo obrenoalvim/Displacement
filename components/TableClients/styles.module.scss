@@ -1,0 +1,11 @@
+
+.tableClient {
+  max-width: 600px; // Define a largura máxima da tabela
+  margin: 0 auto; // Centraliza a tabela horizontalmente
+}
+
+@media (max-width: 600px) {
+  .tableClient {
+    width: 100%; // Define a largura completa da tabela em dispositivos menores
+  }
+}
