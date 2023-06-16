@@ -12,17 +12,33 @@ import {
   Typography,
   Paper,
   TablePagination,
+  TextField,
+  InputAdornment,
+  Grid,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { Cliente } from "@/types";
-import getAllClients from "@/app/api/cliente/page";
+import SearchIcon from "@mui/icons-material/Search";
+import DeleteIcon from "@mui/icons-material/Delete";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import EditIcon from "@mui/icons-material/Edit";
 import styles from "./styles.module.scss";
+import getAllClients from "@/app/api/cliente/page";
+import deleteClient from "../../app/api/cliente/delete";
+import { Cliente } from "@/types";
 
-function Row(props: React.PropsWithChildren<{ row: Cliente }>) {
-  const { row } = props;
+interface Props {
+  row: Cliente;
+  onDelete: (id: number, nome: string) => void;
+}
+
+function Row(props: Props) {
+  const { row, onDelete } = props;
   const [open, setOpen] = useState(false);
+
+  const handleDelete = () => {
+    onDelete(row.id, row.nome);
+  };
 
   return (
     <>
@@ -36,11 +52,20 @@ function Row(props: React.PropsWithChildren<{ row: Cliente }>) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
-          {row.nome}
-        </TableCell>
+
+        <TableCell>{row.nome}</TableCell>
         <TableCell>{row.cidade}</TableCell>
         <TableCell>{row.uf}</TableCell>
+
+        <TableCell>
+          <IconButton aria-label="delete" onClick={handleDelete}>
+            <EditIcon />
+          </IconButton>
+
+          <IconButton aria-label="delete" onClick={handleDelete}>
+            <DeleteIcon />
+          </IconButton>
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -74,16 +99,21 @@ function Row(props: React.PropsWithChildren<{ row: Cliente }>) {
 }
 
 export default function CollapsibleTable() {
-  const [clientes, setClientes] = useState([]);
+  const [clientes, setClientes] = useState<Cliente[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    applySearchFilter();
+  }, [searchTerm, page]);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -100,7 +130,6 @@ export default function CollapsibleTable() {
   const handleUpdate = async () => {
     setIsUpdating(true);
     try {
-      // Lógica de atualização dos dados aqui
       await fetchData();
     } catch (error) {
       console.error("Error updating data:", error);
@@ -119,6 +148,36 @@ export default function CollapsibleTable() {
     setPage(0);
   };
 
+  const filterClientes = () => {
+    const filtered = clientes.filter((cliente) =>
+      Object.values(cliente).some((value) =>
+        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+    return filtered.sort((a, b) => b.id - a.id);
+  };
+
+  const applySearchFilter = () => {
+    const filteredClientes = filterClientes();
+    const totalRows = filteredClientes.length;
+    const lastPage = Math.max(0, Math.ceil(totalRows / rowsPerPage) - 1);
+    const newPage = Math.min(page, lastPage);
+    setPage(newPage);
+  };
+
+  const handleDelete = async (id: number, nome: string) => {
+    const confirmDelete = window.confirm(`Deseja excluir o usuário ${nome}?`);
+    if (confirmDelete) {
+      try {
+        await deleteClient(id);
+        alert(`O usuário ${nome} foi excluído com sucesso.`);
+        handleUpdate();
+      } catch (error) {
+        console.error("Erro ao excluir o usuário:", error);
+      }
+    }
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -127,11 +186,40 @@ export default function CollapsibleTable() {
     return <div>Error fetching data</div>;
   }
 
+  const filteredClientes = filterClientes();
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, clientes.length - page * rowsPerPage);
+    rowsPerPage -
+    Math.min(rowsPerPage, filteredClientes.length - page * rowsPerPage);
 
   return (
     <TableContainer className={styles.tableClient} component={Paper}>
+      <Grid
+        container
+        alignItems="center"
+        justifyContent="space-between"
+        mb={2}
+        style={{ marginTop: "20px", paddingRight: "15px", paddingLeft: "15px" }}
+      >
+        <Grid item>
+          <Typography variant="h6">Clientes</Typography>
+        </Grid>
+        <Grid item sx={{ marginLeft: "auto" }}>
+          <TextField
+            label="Pesquisar"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            variant="outlined"
+            size="small"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+      </Grid>
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
@@ -154,17 +242,20 @@ export default function CollapsibleTable() {
             <TableCell>
               <strong>UF</strong>
             </TableCell>
+            <TableCell>
+              <strong>Ações</strong>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {(rowsPerPage > 0
-            ? clientes.slice(
+            ? filteredClientes.slice(
                 page * rowsPerPage,
                 page * rowsPerPage + rowsPerPage
               )
-            : clientes
+            : filteredClientes
           ).map((cliente) => (
-            <Row key={cliente["id"]} row={cliente} />
+            <Row key={cliente.id} row={cliente} onDelete={handleDelete} />
           ))}
 
           {emptyRows > 0 && (
@@ -177,7 +268,7 @@ export default function CollapsibleTable() {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={clientes.length}
+        count={filteredClientes.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

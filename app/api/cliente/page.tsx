@@ -1,7 +1,8 @@
-// import axios from 'axios';
+import { environment } from "@/environments/environments";
+
 
 export default async function getAllClients() {
-  const response = await fetch('https://api-deslocamento.herokuapp.com/api/v1/Cliente');
+  const response = await fetch(`${environment.BASE_URL}CLiente`);
 
   const responseJson = await response.json();
 
