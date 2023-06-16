@@ -1,7 +1,25 @@
-.buttonNewClient{
-  margin: 15px;
-}
-
 .spanDialog{
   margin-bottom: 10px;
+}
+
+.buttonNewClient {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #1976D2;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+}
+
+.buttonNewClient::before {
+  content: "+";
+  font-weight: bold;
+  color: white;
 }

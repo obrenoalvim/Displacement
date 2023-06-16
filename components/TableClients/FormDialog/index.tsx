@@ -32,11 +32,11 @@ export default function FormDialog() {
   ];
 
   const documentoOptions = [
-    'RG',
-    'CPF',
-    'CNH',
-    'Passaporte',
-    'Carteira de Trabalho'
+    "RG",
+    "CPF",
+    "CNH",
+    "Passaporte",
+    "Carteira de Trabalho",
   ];
 
   return (
@@ -46,7 +46,7 @@ export default function FormDialog() {
         variant="outlined"
         onClick={handleClickOpen}
       >
-        Novo Cliente
+        
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Novo Cliente</DialogTitle>
@@ -55,33 +55,33 @@ export default function FormDialog() {
             Preencha os campos abaixo para cadastrar um novo cliente.
           </DialogContentText>
           {formFields.map((field) => {
-        if (field.id === 'tipoDocumento') {
-          return (
-            <Autocomplete
-              key={field.id}
-              id={field.id}
-              options={documentoOptions}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label={field.label}
-                  fullWidth
-                  margin="normal"
+            if (field.id === "tipoDocumento") {
+              return (
+                <Autocomplete
+                  key={field.id}
+                  id={field.id}
+                  options={documentoOptions}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={field.label}
+                      fullWidth
+                      margin="normal"
+                    />
+                  )}
                 />
-              )}
-            />
-          );
-        }
-        return (
-          <TextField
-            key={field.id}
-            id={field.id}
-            label={field.label}
-            fullWidth
-            margin="normal"
-          />
-        );
-      })}
+              );
+            }
+            return (
+              <TextField
+                key={field.id}
+                id={field.id}
+                label={field.label}
+                fullWidth
+                margin="normal"
+              />
+            );
+          })}
           {/* <TextField id="nome" label="Nome" variant="outlined" fullWidth/> */}
         </DialogContent>
         <DialogActions>

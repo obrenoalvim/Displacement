@@ -1,39 +1,33 @@
-
 .tableClient {
-  max-width: 600px; // Define a largura máxima da tabela
-  margin: 0 auto; // Centraliza a tabela horizontalmente
-}
-
-@media (max-width: 600px) {
-  .tableClient {
-    width: 100%; // Define a largura completa da tabela em dispositivos menores
-  }
-}
-
-.tableContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   margin-top: 20px;
-}
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
 
-.table {
-  width: 80%;
-  margin-bottom: 20px;
-}
+  .MuiButton-containedPrimary {
+    background-color: #3f51b5;
+    color: #fff;
+    &:hover {
+      background-color: #303f9f;
+    }
+  }
 
-.paginationContainer {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
+  .MuiTableCell-head {
+    font-weight: bold;
+  }
 
-.paginationLink {
-  color: blue;
-  cursor: pointer;
-  margin: 0 5px;
-}
+  .MuiTableRow-root {
+    &.Mui-selected,
+    &.Mui-selected:hover {
+      background-color: #e8eaf6;
+    }
+  }
 
-.paginationActive {
-  font-weight: bold;
+  @media (max-width: 768px) {
+    width: 100%;
+
+    .MuiTableContainer-root {
+      overflow-x: auto;
+    }
+  }
 }

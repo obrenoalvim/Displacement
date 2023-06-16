@@ -17,6 +17,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Cliente } from "@/types";
 import getAllClients from "@/app/api/cliente/page";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import styles from "./styles.module.scss";
 
 function Row(props: React.PropsWithChildren<{ row: Cliente }>) {
@@ -78,24 +79,42 @@ export default function CollapsibleTable() {
   const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
-    getAllClients()
-      .then((data) => {
-        setClientes(data);
-        setIsLoading(false);
-      })
-      .catch(() => {
-        setIsLoading(false);
-        setIsError(true);
-      });
+    fetchData();
   }, []);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    setIsError(false);
+    try {
+      const data = await getAllClients();
+      setClientes(data);
+    } catch (error) {
+      setIsError(true);
+    }
+    setIsLoading(false);
+  };
+
+  const handleUpdate = async () => {
+    setIsUpdating(true);
+    try {
+      // Lógica de atualização dos dados aqui
+      await fetchData();
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
+    setIsUpdating(false);
+  };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
@@ -108,14 +127,24 @@ export default function CollapsibleTable() {
     return <div>Error fetching data</div>;
   }
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, clientes.length - page * rowsPerPage);
+  const emptyRows =
+    rowsPerPage - Math.min(rowsPerPage, clientes.length - page * rowsPerPage);
 
   return (
     <TableContainer className={styles.tableClient} component={Paper}>
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
-            <TableCell />
+            <TableCell>
+              <IconButton
+                aria-label="update"
+                color="primary"
+                disabled={isUpdating}
+                onClick={handleUpdate}
+              >
+                <RefreshIcon />
+              </IconButton>
+            </TableCell>
             <TableCell>
               <strong>Nome</strong>
             </TableCell>
@@ -129,7 +158,10 @@ export default function CollapsibleTable() {
         </TableHead>
         <TableBody>
           {(rowsPerPage > 0
-            ? clientes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            ? clientes.slice(
+                page * rowsPerPage,
+                page * rowsPerPage + rowsPerPage
+              )
             : clientes
           ).map((cliente) => (
             <Row key={cliente["id"]} row={cliente} />
