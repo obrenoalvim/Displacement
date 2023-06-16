@@ -26,6 +26,7 @@ import styles from "./styles.module.scss";
 import getAllClients from "@/app/api/cliente/page";
 import deleteClient from "../../app/api/cliente/delete";
 import { Cliente } from "@/types";
+import getClient from "@/app/api/cliente/client";
 
 interface Props {
   row: Cliente;
@@ -58,7 +59,7 @@ function Row(props: Props) {
         <TableCell>{row.uf}</TableCell>
 
         <TableCell>
-          <IconButton aria-label="delete" onClick={handleDelete}>
+          <IconButton aria-label="edit">
             <EditIcon />
           </IconButton>
 
@@ -111,10 +112,6 @@ export default function CollapsibleTable() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    applySearchFilter();
-  }, [searchTerm, page]);
-
   const fetchData = async () => {
     setIsLoading(true);
     setIsError(false);
@@ -165,15 +162,26 @@ export default function CollapsibleTable() {
     setPage(newPage);
   };
 
+  const verifyClient = async (id: number) => {
+    const response = await getClient(id);
+    const responseJson = await response.json();
+
+    return responseJson ? true : false;
+  };
+
   const handleDelete = async (id: number, nome: string) => {
     const confirmDelete = window.confirm(`Deseja excluir o usuário ${nome}?`);
     if (confirmDelete) {
       try {
         await deleteClient(id);
-        alert(`O usuário ${nome} foi excluído com sucesso.`);
-        handleUpdate();
       } catch (error) {
-        console.error("Erro ao excluir o usuário:", error);
+        try {
+          verifyClient(id);
+          alert(`O usuário ${nome} foi exluído com sucesso!.`);
+          fetchData();
+        } catch (error) {
+          alert(`Erro ao deletar usuário ${nome}.`);
+        }
       }
     }
   };
@@ -248,15 +256,11 @@ export default function CollapsibleTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {(rowsPerPage > 0
-            ? filteredClientes.slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage
-              )
-            : filteredClientes
-          ).map((cliente) => (
-            <Row key={cliente.id} row={cliente} onDelete={handleDelete} />
-          ))}
+          {filteredClientes
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((cliente) => (
+              <Row key={cliente.id} row={cliente} onDelete={handleDelete} />
+            ))}
 
           {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
