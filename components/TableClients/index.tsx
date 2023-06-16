@@ -22,6 +22,7 @@ import {
   DialogActions,
   Button,
   Snackbar,
+  CircularProgress,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -34,6 +35,8 @@ import getAllClients from "@/app/api/cliente/page";
 import deleteClient from "../../app/api/cliente/delete";
 import { Cliente } from "@/types";
 import getClient from "@/app/api/cliente/client";
+import DialogLoading from "../Utils/Dialog/Loading/page";
+import DialogError from "../Utils/Dialog/Error/page";
 
 interface Props {
   row: Cliente;
@@ -221,11 +224,15 @@ export default function CollapsibleTable() {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <DialogLoading loading={isLoading} />;
   }
 
   if (isError) {
-    return <div>Error fetching data</div>;
+    setInterval(() => {
+      window.location.reload();
+    }, 5000);
+    return <DialogError error={isError} />
+    // return <div>Error fetching data</div>;
   }
 
   const filteredClientes = filterClientes();
