@@ -1,13 +1,15 @@
 "use client";
 import FormDialog from "@/components/TableClients/FormDialog";
-import ResponsiveAppBar from "../../components/Header";
+import Header from "../../components/Header";
 import CollapsibleTable from "../../components/TableClients";
+import Footer from "@/components/Footer/page";
 export default function Home() {
   return (
     <>
-      <ResponsiveAppBar />
-      <FormDialog/>
+      <Header />
+      {/* <FormDialog/> */}
       <CollapsibleTable />
+      <Footer />
     </>
   );
 }

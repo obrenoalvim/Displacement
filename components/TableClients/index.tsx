@@ -23,12 +23,15 @@ import {
   Button,
   Snackbar,
   CircularProgress,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import SearchIcon from "@mui/icons-material/Search";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import styles from "./styles.module.scss";
 import getAllClients from "@/app/api/cliente/page";
@@ -66,7 +69,10 @@ function Row(props: Props) {
 
         <TableCell>{row.nome}</TableCell>
         <TableCell>{row.cidade}</TableCell>
-        <TableCell>{row.uf}</TableCell>
+        {!useMediaQuery(useTheme().breakpoints.down("sm")) && (
+          // Renderiza o campo "uf" apenas em telas maiores que "sm"
+          <TableCell>{row.uf}</TableCell>
+        )}
 
         <TableCell>
           <IconButton aria-label="edit">
@@ -148,6 +154,10 @@ export default function CollapsibleTable() {
     }
     setIsUpdating(false);
   };
+
+  const handleAddNew = async () => {
+    console.log('TESTE')
+  }
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -231,7 +241,7 @@ export default function CollapsibleTable() {
     setInterval(() => {
       window.location.reload();
     }, 5000);
-    return <DialogError error={isError} />
+    return <DialogError error={isError} />;
     // return <div>Error fetching data</div>;
   }
 
@@ -242,33 +252,34 @@ export default function CollapsibleTable() {
 
   return (
     <TableContainer className={styles.tableClient} component={Paper}>
-      <Grid
-        container
-        alignItems="center"
-        justifyContent="space-between"
-        mb={2}
-        style={{ marginTop: "20px", paddingRight: "15px", paddingLeft: "15px" }}
-      >
-        <Grid item>
-          <Typography variant="h6">Clientes</Typography>
-        </Grid>
-        <Grid item sx={{ marginLeft: "auto" }}>
-          <TextField
-            label="Pesquisar"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            variant="outlined"
-            size="small"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Grid>
-      </Grid>
+<Grid container alignItems="center" justifyContent="space-between" mb={2} style={{ marginTop: "20px", paddingRight: "15px", paddingLeft: "15px" }}>
+  <Grid item>
+    <Typography variant="h6">Clientes</Typography>
+  </Grid>
+  <Grid item>
+    <Grid container alignItems="center">
+      <IconButton  className={styles.buttonNew} aria-label="add" color="primary" onClick={handleAddNew}>
+        <AddIcon />
+        <Typography>Novo Cliente</Typography>
+      </IconButton>
+      <TextField
+        label="Pesquisar"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        variant="outlined"
+        size="small"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
+      />
+    </Grid>
+  </Grid>
+</Grid>
+
       <Table aria-label="collapsible table">
         <TableHead>
           <TableRow>
@@ -288,9 +299,11 @@ export default function CollapsibleTable() {
             <TableCell>
               <strong>Cidade</strong>
             </TableCell>
-            <TableCell>
-              <strong>UF</strong>
-            </TableCell>
+            {!/Mobi|Android/i.test(navigator.userAgent) && (
+              <TableCell>
+                <strong>UF</strong>
+              </TableCell>
+            )}
             <TableCell>
               <strong>Ações</strong>
             </TableCell>

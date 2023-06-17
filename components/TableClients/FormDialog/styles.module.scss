@@ -6,16 +6,18 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  z-index: 99;
+  z-index: 9999;
   width: 60px;
   height: 60px;
   border-radius: 50%;
   background-color: #1976D2;
+  // border: 1px solid white;
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 24px;
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
 }
 
 .buttonNewClient::before {
