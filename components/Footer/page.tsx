@@ -7,7 +7,7 @@ export default function Footer() {
     <AppBar position="fixed" className={styles.footer}>
       <Toolbar className={styles.toolbar}>
         <Typography variant="body1" className={styles.text}>
-          Feito por Breno Alvim
+          Feito por <strong>Breno Alvim</strong>
         </Typography>
       </Toolbar>
     </AppBar>

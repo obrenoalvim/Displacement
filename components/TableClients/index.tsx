@@ -22,7 +22,6 @@ import {
   DialogActions,
   Button,
   Snackbar,
-  CircularProgress,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -70,7 +69,6 @@ function Row(props: Props) {
         <TableCell>{row.nome}</TableCell>
         <TableCell>{row.cidade}</TableCell>
         {!useMediaQuery(useTheme().breakpoints.down("sm")) && (
-          // Renderiza o campo "uf" apenas em telas maiores que "sm"
           <TableCell>{row.uf}</TableCell>
         )}
 
@@ -360,3 +358,4 @@ export default function CollapsibleTable() {
     </TableContainer>
   );
 }
+
