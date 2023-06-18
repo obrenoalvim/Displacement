@@ -24,6 +24,7 @@ import {
   Snackbar,
   useMediaQuery,
   useTheme,
+  Autocomplete
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -35,22 +36,29 @@ import EditIcon from "@mui/icons-material/Edit";
 import styles from "./styles.module.scss";
 import getAllClients from "@/app/api/cliente/page";
 import deleteClient from "../../app/api/cliente/delete";
-import { Cliente } from "@/types";
 import getClient from "@/app/api/cliente/client";
+import newClient from "@/app/api/cliente/add";
+import updateClient from "@/app/api/cliente/update";
+import { Cliente } from "@/types";
 import DialogLoading from "../Utils/Dialog/Loading/page";
 import DialogError from "../Utils/Dialog/Error/page";
 
 interface Props {
   row: Cliente;
   onDelete: (id: number, nome: string) => void;
+  onEdit: (cliente: Cliente) => void;
 }
 
 function Row(props: Props) {
-  const { row, onDelete } = props;
+  const { row, onDelete, onEdit } = props;
   const [open, setOpen] = useState(false);
 
   const handleDelete = () => {
     onDelete(row.id, row.nome);
+  };
+
+  const handleEdit = () => {
+    onEdit(row);
   };
 
   return (
@@ -73,7 +81,7 @@ function Row(props: Props) {
         )}
 
         <TableCell>
-          <IconButton aria-label="edit">
+          <IconButton aria-label="edit" onClick={handleEdit}>
             <EditIcon />
           </IconButton>
 
@@ -126,6 +134,8 @@ export default function CollapsibleTable() {
   const [deleteClientName, setDeleteClientName] = useState<string>("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogCliente, setDialogCliente] = useState<Cliente | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -153,9 +163,34 @@ export default function CollapsibleTable() {
     setIsUpdating(false);
   };
 
-  const handleAddNew = async () => {
-    console.log('TESTE')
-  }
+  const handleAddNew = () => {
+    setDialogCliente(null);
+    setDialogOpen(true);
+  };
+
+  const handleEdit = (cliente: Cliente) => {
+    setDialogCliente(cliente);
+    setDialogOpen(true);
+  };
+
+  const handleSave = async (cliente: Cliente) => {
+    setDialogOpen(false);
+  
+    try {
+      if (cliente.id) {
+        await updateClient(cliente);
+        setSnackbarMessage(`O cliente ${cliente.nome} foi atualizado com sucesso!`);
+      } else {
+        await newClient(cliente);
+        setSnackbarMessage(`O cliente ${cliente.nome} foi cadastrado com sucesso!`);
+      }
+      setSnackbarOpen(true);
+      fetchData();
+    } catch (error) {
+      setSnackbarMessage(`Erro ao salvar cliente.`);
+      setSnackbarOpen(true);
+    }
+  };
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -197,6 +232,15 @@ export default function CollapsibleTable() {
     setDeleteClientName(nome);
     setDeleteDialogOpen(true);
   };
+
+
+  const handleTipoDocumentoChange = (event, value) => {
+    setDialogCliente((prevState) => ({
+      ...prevState,
+      tipoDocumento: value
+    }));
+  };
+  
 
   const handleCancelDelete = () => {
     setDeleteDialogOpen(false);
@@ -240,7 +284,6 @@ export default function CollapsibleTable() {
       window.location.reload();
     }, 5000);
     return <DialogError error={isError} />;
-    // return <div>Error fetching data</div>;
   }
 
   const filteredClientes = filterClientes();
@@ -248,35 +291,65 @@ export default function CollapsibleTable() {
     rowsPerPage -
     Math.min(rowsPerPage, filteredClientes.length - page * rowsPerPage);
 
+  const formFields = [
+    { id: "numeroDocumento", label: "Número do Documento" },
+    { id: "tipoDocumento", label: "Tipo do Documento" },
+    { id: "nome", label: "Nome" },
+    { id: "logradouro", label: "Logradouro" },
+    { id: "numero", label: "Número" },
+    { id: "bairro", label: "Bairro" },
+    { id: "cidade", label: "Cidade" },
+    { id: "uf", label: "UF" },
+  ];
+
+  const documentoOptions = [
+    "RG",
+    "CPF",
+    "CNH",
+    "Passaporte",
+    "Carteira de Trabalho",
+  ];
+
   return (
     <TableContainer className={styles.tableClient} component={Paper}>
-<Grid container alignItems="center" justifyContent="space-between" mb={2} style={{ marginTop: "20px", paddingRight: "15px", paddingLeft: "15px" }}>
-  <Grid item>
-    <Typography variant="h6">Clientes</Typography>
-  </Grid>
-  <Grid item>
-    <Grid container alignItems="center">
-      <IconButton  className={styles.buttonNew} aria-label="add" color="primary" onClick={handleAddNew}>
-        <AddIcon />
-        <Typography>Novo Cliente</Typography>
-      </IconButton>
-      <TextField
-        label="Pesquisar"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        variant="outlined"
-        size="small"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          ),
-        }}
-      />
-    </Grid>
-  </Grid>
-</Grid>
+      <Grid
+        container
+        alignItems="center"
+        justifyContent="space-between"
+        mb={2}
+        style={{ marginTop: "20px", paddingRight: "15px", paddingLeft: "15px" }}
+      >
+        <Grid item>
+          <Typography variant="h6">Clientes</Typography>
+        </Grid>
+        <Grid item>
+          <Grid container alignItems="center">
+            <IconButton
+              className={styles.buttonNew}
+              aria-label="add"
+              color="primary"
+              onClick={handleAddNew}
+            >
+              <AddIcon />
+              <Typography>Novo Cliente</Typography>
+            </IconButton>
+            <TextField
+              label="Pesquisar"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              variant="outlined"
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+        </Grid>
+      </Grid>
 
       <Table aria-label="collapsible table">
         <TableHead>
@@ -311,7 +384,12 @@ export default function CollapsibleTable() {
           {filteredClientes
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((cliente) => (
-              <Row key={cliente.id} row={cliente} onDelete={handleDelete} />
+              <Row
+                key={cliente.id}
+                row={cliente}
+                onDelete={handleDelete}
+                onEdit={handleEdit}
+              />
             ))}
 
           {emptyRows > 0 && (
@@ -321,6 +399,7 @@ export default function CollapsibleTable() {
           )}
         </TableBody>
       </Table>
+
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
@@ -332,30 +411,59 @@ export default function CollapsibleTable() {
       />
 
       <Dialog open={deleteDialogOpen} onClose={handleCancelDelete}>
-        <DialogTitle>Confirmar exclusão</DialogTitle>
+        <DialogTitle>Confirmação de exclusão</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Deseja realmente excluir o cliente {deleteClientName}?
+            Tem certeza que deseja excluir o cliente {deleteClientName}?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancelDelete}>Cancelar</Button>
-          <Button onClick={handleConfirmDelete} autoFocus>
+          <Button onClick={handleCancelDelete} color="primary">
+            Cancelar
+          </Button>
+          <Button onClick={handleConfirmDelete} color="primary" autoFocus>
             Confirmar
           </Button>
         </DialogActions>
       </Dialog>
 
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+        <DialogTitle>
+          {dialogCliente ? "Editar cliente" : "Novo cliente"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>Preencha os campos abaixo:</DialogContentText>
+          {formFields.map((field) => {
+            return (
+              <TextField
+                key={field.id}
+                id={field.id}
+                label={field.label}
+                fullWidth
+                margin="normal"
+                value={dialogCliente ? dialogCliente[field.id] : ""}
+                onChange={(e) =>
+                  setDialogCliente((prevState) => ({
+                    ...prevState,
+                    [field.id]: e.target.value
+                  }))
+                }
+              />
+            );
+          })}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDialogOpen(false)}>Cancelar</Button>
+          <Button onClick={() => handleSave(dialogCliente)}>Salvar</Button>
+        </DialogActions>
+      </Dialog>
+
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={6000}
+        autoHideDuration={5000}
         onClose={handleCloseSnackbar}
         message={snackbarMessage}
-        ContentProps={{
-          sx: { backgroundColor: "#43a047" },
-        }}
       />
     </TableContainer>
   );
 }
-

@@ -1,25 +1,17 @@
 import { environment } from "@/environments/environments";
-import { useIsFocusVisible } from "@mui/material";
-
+import { Cliente } from "@/types";
 export default async function newClient(
-  numeroDocumento: string,
-  tipoDocumento: string,
-  nome: string,
-  logradouro: string,
-  numero: string,
-  bairro: string,
-  cidade: string,
-  uf: string
+  cliente: Cliente
 ) {
   const body = {
-    numeroDocumento: numeroDocumento,
-    tipoDocumento: tipoDocumento,
-    nome: nome,
-    logradouro: logradouro,
-    numero: numero,
-    bairro: bairro,
-    cidade: cidade,
-    uf: uf,
+    "numeroDocumento": cliente.numeroDocumento,
+    "tipoDocumento": cliente.tipoDocumento,
+    "nome": cliente.nome,
+    "logradouro": cliente.logradouro,
+    "numero": cliente.numero,
+    "bairro": cliente.bairro,
+    "cidade": cliente.cidade,
+    "uf": cliente.uf,
   };
 
   const response = await fetch(
