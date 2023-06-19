@@ -2,11 +2,10 @@ const path = require('path')
 
 /** @type {import('next').NextConfig} */
 
-const nextConfig = {
+module.exports = {
   reactStrictMode: true,
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
-  }
-}
-
-module.exports = nextConfig
+    prependData: `@import "styles/variables.scss";`, // Importa o arquivo de variáveis globais
+  },
+};
