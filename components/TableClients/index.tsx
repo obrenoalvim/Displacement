@@ -24,7 +24,6 @@ import {
   Snackbar,
   useMediaQuery,
   useTheme,
-  Autocomplete
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -175,14 +174,18 @@ export default function CollapsibleTable() {
 
   const handleSave = async (cliente: Cliente) => {
     setDialogOpen(false);
-  
+
     try {
       if (cliente.id) {
         await updateClient(cliente);
-        setSnackbarMessage(`O cliente ${cliente.nome} foi atualizado com sucesso!`);
+        setSnackbarMessage(
+          `O cliente ${cliente.nome} foi atualizado com sucesso!`
+        );
       } else {
         await newClient(cliente);
-        setSnackbarMessage(`O cliente ${cliente.nome} foi cadastrado com sucesso!`);
+        setSnackbarMessage(
+          `O cliente ${cliente.nome} foi cadastrado com sucesso!`
+        );
       }
       setSnackbarOpen(true);
       fetchData();
@@ -222,10 +225,21 @@ export default function CollapsibleTable() {
 
   const verifyClient = async (id: number) => {
     const response = await getClient(id);
-    const responseJson = await response.json();
-
-    return responseJson ? true : false;
+    return response.id == id ? true : false;
   };
+
+  const handleTipoDocumentoChange = (event, value) => {
+    setDialogCliente((prevState) => ({
+      ...prevState,
+      tipoDocumento: value,
+    }));
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteDialogOpen(false);
+  };
+
+
 
   const handleDelete = async (id: number, nome: string) => {
     setDeleteClientId(id);
@@ -233,42 +247,53 @@ export default function CollapsibleTable() {
     setDeleteDialogOpen(true);
   };
 
-
-  const handleTipoDocumentoChange = (event, value) => {
-    setDialogCliente((prevState) => ({
-      ...prevState,
-      tipoDocumento: value
-    }));
-  };
-  
-
-  const handleCancelDelete = () => {
-    setDeleteDialogOpen(false);
-  };
-
   const handleConfirmDelete = async () => {
     setDeleteDialogOpen(false);
 
+
     try {
-      await deleteClient(deleteClientId);
-      setSnackbarMessage(
-        `O usuário ${deleteClientName} foi excluído com sucesso!`
-      );
-      setSnackbarOpen(true);
-      fetchData();
-    } catch (error) {
-      try {
-        verifyClient(deleteClientId);
+      const response = await deleteClient(deleteClientId)
+      if(response){
         setSnackbarMessage(
           `O usuário ${deleteClientName} foi excluído com sucesso!`
         );
-        setSnackbarOpen(true);
-        fetchData();
-      } catch (error) {
-        setSnackbarMessage(`Erro ao deletar usuário ${deleteClientName}.`);
-        setSnackbarOpen(true);
-      }
+        setSnackbarOpen(true)
+        fetchData()
+    } else {
+      setSnackbarMessage(`Erro ao deletar usuário ${deleteClientName}.`);
+      setSnackbarOpen(true)
+      fetchData()
     }
+    } catch {
+      setSnackbarMessage(`Erro ao deletar usuário ${deleteClientName}.`);
+      setSnackbarOpen(true)
+      fetchData()
+    }
+    // try {
+    //   const response = await deleteClient(deleteClientId);
+    //   setSnackbarMessage(
+    //     `O usuário ${deleteClientName} foi excluído com sucesso!`
+    //   );
+    //   setSnackbarOpen(true);
+    //   fetchData();
+    // } catch (error) {
+    //   try {
+    //     const findClient = await verifyClient(deleteClientId);
+    //     if(findClient == true){
+    //       setSnackbarMessage(`Erro ao deletar usuário ${deleteClientName}.`);
+    //       throw new Error('findClient is true');
+    //     }
+    //     setSnackbarMessage(
+    //       `O usuário ${deleteClientName} foi excluído com sucesso!`
+    //     );
+    //     setSnackbarOpen(true);
+    //     fetchData();
+    //   } catch (error) {
+    //     setSnackbarMessage(`Erro ao deletar usuário ${deleteClientName}.`);
+    //     setSnackbarOpen(true);
+    //     fetchData();
+    //   }
+    // }
   };
 
   const handleCloseSnackbar = () => {
@@ -434,22 +459,30 @@ export default function CollapsibleTable() {
         <DialogContent>
           <DialogContentText>Preencha os campos abaixo:</DialogContentText>
           {formFields.map((field) => {
-            return (
-              <TextField
-                key={field.id}
-                id={field.id}
-                label={field.label}
-                fullWidth
-                margin="normal"
-                value={dialogCliente ? dialogCliente[field.id] : ""}
-                onChange={(e) =>
-                  setDialogCliente((prevState) => ({
-                    ...prevState,
-                    [field.id]: e.target.value
-                  }))
-                }
-              />
-            );
+            const isEditingExistingClient = dialogCliente && dialogCliente.id;
+            const isNumeroDocumentoField = field.id === "numeroDocumento";
+            const shouldRenderField =
+              !isEditingExistingClient || !isNumeroDocumentoField;
+            if (shouldRenderField) {
+              return (
+                <TextField
+                  key={field.id}
+                  id={field.id}
+                  label={field.label}
+                  fullWidth
+                  margin="normal"
+                  value={dialogCliente ? dialogCliente[field.id] : ""}
+                  onChange={(e) =>
+                    setDialogCliente((prevState) => ({
+                      ...prevState,
+                      [field.id]: e.target.value,
+                    }))
+                  }
+                />
+              );
+            }
+
+            return null;
           })}
         </DialogContent>
         <DialogActions>

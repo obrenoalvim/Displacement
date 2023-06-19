@@ -13,7 +13,5 @@ export default async function deleteClient(id: number) {
     body: body,
   });
 
-  const responseJson = await response.json();
-
-  return responseJson;
+  return response.status == 400 ? false : true
 }

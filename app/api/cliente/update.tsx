@@ -2,6 +2,10 @@ import { environment } from "@/environments/environments";
 import { Cliente } from "../../../types";
 
 export default async function updateClient(cliente: Cliente) {
+
+
+  console.log(cliente)
+
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
@@ -14,8 +18,9 @@ export default async function updateClient(cliente: Cliente) {
     "cidade": cliente.cidade,
     "uf": cliente.uf,
     "tipoDocumento": cliente.tipoDocumento,
-    "numeroDocumento": cliente.numeroDocumento
   });
+
+  console.log('body', body)
 
   try{
 
