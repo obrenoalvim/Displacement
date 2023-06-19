@@ -39,7 +39,7 @@ import updateClient from "../Api/cliente/update";
 import { Cliente } from "@/types";
 import DialogLoading from "../Utils/Dialog/Loading/page";
 import DialogError from "../Utils/Dialog/Error/page";
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 
 interface Props {
   row: Cliente;
