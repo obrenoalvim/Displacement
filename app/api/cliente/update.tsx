@@ -3,9 +3,6 @@ import { Cliente } from "../../../types";
 
 export default async function updateClient(cliente: Cliente) {
 
-
-  console.log(cliente)
-
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
@@ -19,8 +16,6 @@ export default async function updateClient(cliente: Cliente) {
     "uf": cliente.uf,
     "tipoDocumento": cliente.tipoDocumento,
   });
-
-  console.log('body', body)
 
   try{
 

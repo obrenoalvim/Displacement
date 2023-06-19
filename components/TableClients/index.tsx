@@ -215,31 +215,9 @@ export default function CollapsibleTable() {
     return filtered.sort((a, b) => b.id - a.id);
   };
 
-  const applySearchFilter = () => {
-    const filteredClientes = filterClientes();
-    const totalRows = filteredClientes.length;
-    const lastPage = Math.max(0, Math.ceil(totalRows / rowsPerPage) - 1);
-    const newPage = Math.min(page, lastPage);
-    setPage(newPage);
-  };
-
-  const verifyClient = async (id: number) => {
-    const response = await getClient(id);
-    return response.id == id ? true : false;
-  };
-
-  const handleTipoDocumentoChange = (event, value) => {
-    setDialogCliente((prevState) => ({
-      ...prevState,
-      tipoDocumento: value,
-    }));
-  };
-
   const handleCancelDelete = () => {
     setDeleteDialogOpen(false);
   };
-
-
 
   const handleDelete = async (id: number, nome: string) => {
     setDeleteClientId(id);
@@ -269,31 +247,6 @@ export default function CollapsibleTable() {
       setSnackbarOpen(true)
       fetchData()
     }
-    // try {
-    //   const response = await deleteClient(deleteClientId);
-    //   setSnackbarMessage(
-    //     `O usuário ${deleteClientName} foi excluído com sucesso!`
-    //   );
-    //   setSnackbarOpen(true);
-    //   fetchData();
-    // } catch (error) {
-    //   try {
-    //     const findClient = await verifyClient(deleteClientId);
-    //     if(findClient == true){
-    //       setSnackbarMessage(`Erro ao deletar usuário ${deleteClientName}.`);
-    //       throw new Error('findClient is true');
-    //     }
-    //     setSnackbarMessage(
-    //       `O usuário ${deleteClientName} foi excluído com sucesso!`
-    //     );
-    //     setSnackbarOpen(true);
-    //     fetchData();
-    //   } catch (error) {
-    //     setSnackbarMessage(`Erro ao deletar usuário ${deleteClientName}.`);
-    //     setSnackbarOpen(true);
-    //     fetchData();
-    //   }
-    // }
   };
 
   const handleCloseSnackbar = () => {
@@ -325,14 +278,6 @@ export default function CollapsibleTable() {
     { id: "bairro", label: "Bairro" },
     { id: "cidade", label: "Cidade" },
     { id: "uf", label: "UF" },
-  ];
-
-  const documentoOptions = [
-    "RG",
-    "CPF",
-    "CNH",
-    "Passaporte",
-    "Carteira de Trabalho",
   ];
 
   return (
@@ -416,7 +361,6 @@ export default function CollapsibleTable() {
                 onEdit={handleEdit}
               />
             ))}
-
           {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
               <TableCell colSpan={6} />
@@ -465,20 +409,24 @@ export default function CollapsibleTable() {
               !isEditingExistingClient || !isNumeroDocumentoField;
             if (shouldRenderField) {
               return (
-                <TextField
-                  key={field.id}
-                  id={field.id}
-                  label={field.label}
-                  fullWidth
-                  margin="normal"
-                  value={dialogCliente ? dialogCliente[field.id] : ""}
-                  onChange={(e) =>
-                    setDialogCliente((prevState) => ({
-                      ...prevState,
-                      [field.id]: e.target.value,
-                    }))
-                  }
-                />
+
+
+<TextField
+  key={field.id}
+  id={field.id}
+  label={field.label}
+  fullWidth
+  margin="normal"
+  value={dialogCliente?.[field.id] ?? ""}
+  onChange={(e) =>
+    setDialogCliente((prevState) => ({
+      ...prevState,
+      [field.id]: e.target.value,
+    }))
+  }
+/>
+
+
               );
             }
 
