@@ -134,7 +134,7 @@ export default function CollapsibleTable() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogCliente, setDialogCliente] = useState<Cliente | null>(null);
+  const [dialogCliente, setDialogCliente] = useState<any | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -419,7 +419,7 @@ export default function CollapsibleTable() {
   margin="normal"
   value={dialogCliente?.[field.id] ?? ""}
   onChange={(e) =>
-    setDialogCliente((prevState) => ({
+    setDialogCliente((prevState: any) => ({
       ...prevState,
       [field.id]: e.target.value,
     }))
