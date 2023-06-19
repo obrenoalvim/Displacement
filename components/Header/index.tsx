@@ -1,13 +1,24 @@
-import { useState } from 'react';
-import Link from 'next/link';
-import { AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, useMediaQuery, useTheme } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import { useState } from "react";
+import Link from "next/link";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 
-import styles from './styles.module.scss';
+import styles from "./styles.module.scss";
 
-export default function Header(){
+export default function Header() {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -17,7 +28,12 @@ export default function Header(){
   const renderLinks = () => {
     if (isMobile) {
       return (
-        <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleMenu}>
+        <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          onClick={toggleMenu}
+        >
           <MenuIcon />
         </IconButton>
       );
@@ -52,11 +68,10 @@ export default function Header(){
   return (
     <AppBar position="static" className={styles.appBar}>
       <Toolbar>
-     
         <Typography variant="h6" className={styles.logo}>
           APPNATY
         </Typography>
-     
+
         {renderLinks()}
         <Drawer anchor="right" open={isMenuOpen} onClose={toggleMenu}>
           <List>
@@ -85,4 +100,4 @@ export default function Header(){
       </Toolbar>
     </AppBar>
   );
-};
+}
