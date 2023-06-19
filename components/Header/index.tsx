@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, useMediaQuery, useTheme } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
-import styles from './styles.module.css';
+import styles from '../styles/styles.module.scss';
 
 export default function Header(){
   const theme = useTheme();
