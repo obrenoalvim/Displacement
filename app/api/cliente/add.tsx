@@ -15,7 +15,7 @@ export default async function newClient(
   };
 
   const response = await fetch(
-    "https://api-deslocamento.herokuapp.com/api/v1/Cliente",
+    `${environment.BASE_URL}Cliente`,
     {
       method: "POST",
       headers: {
