@@ -1,44 +1,44 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Container = styled.header`
-  .tableConductor {
+  .tableVehicle {
     margin-top: 20px;
     width: 90%;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 150px;
   }
-  
-  .tableConductor .buttonNew {
+
+  .tableVehicle .buttonNew {
     border: 1px solid #3f51b5;
     border-radius: 5px;
     margin: 15px;
   }
-  
-  .tableConductor .MuiButton-containedPrimary {
+
+  .tableVehicle .MuiButton-containedPrimary {
     background-color: #3f51b5;
     color: #fff;
   }
-  
-  .tableConductor .MuiButton-containedPrimary:hover {
+
+  .tableVehicle .MuiButton-containedPrimary:hover {
     background-color: #303f9f;
   }
-  
-  .tableConductor .MuiTableCell-head {
+
+  .tableVehicle .MuiTableCell-head {
     font-weight: bold;
   }
-  
-  .tableConductor .MuiTableRow-root.Mui-selected,
-  .tableConductor .MuiTableRow-root.Mui-selected:hover {
+
+  .tableVehicle .MuiTableRow-root.Mui-selected,
+  .tableVehicle .MuiTableRow-root.Mui-selected:hover {
     background-color: #e8eaf6;
   }
-  
+
   @media (max-width: 768px) {
-    .tableConductor {
+    .tableVehicle {
       width: 100%;
     }
-  
-    .tableConductor .MuiTableContainer-root {
+
+    .tableVehicle .MuiTableContainer-root {
       overflow-x: auto;
     }
   }

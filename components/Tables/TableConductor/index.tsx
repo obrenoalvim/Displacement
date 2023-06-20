@@ -24,17 +24,17 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
-import getAllConductors from "../Api/conductor";
-import deleteConductor from "../Api/conductor/delete";
-import newConductor from "../Api/conductor/add";
-import updateConductor from "../Api/conductor/update";
+import getAllConductors from "../../Api/conductor";
+import deleteConductor from "../../Api/conductor/delete";
+import newConductor from "../../Api/conductor/add";
+import updateConductor from "../../Api/conductor/update";
 import { Conductor } from "@/types";
-import DialogLoading from "../Utils/Dialog/Loading/page";
-import DialogError from "../Utils/Dialog/Error/page";
+import DialogLoading from "../../Utils/Dialog/Loading/page";
+import DialogError from "../../Utils/Dialog/Error/page";
 import { useMediaQuery } from "react-responsive";
 import { Container } from "./styles";
 import Row from "./Row";
-import { formFieldsConductor } from "../Form/FormFields/conductor";
+import { formFieldsConductor } from "../../Form/FormFields/conductor";
 
 export default function CollapsibleTable() {
   const [conductors, setConductors] = useState<Conductor[]>([]);

@@ -17,3 +17,11 @@ export interface Conductor {
   catergoriaHabilitacao: string;
   vencimentoHabilitacao: string;
 }
+
+export interface Vehicle {
+  id: number;
+  placa: string;
+  marcaModelo: string;
+  anoFabricacao: number;
+  kmAtual: number;
+}

@@ -24,21 +24,20 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
-import getAllClients from "../Api/client";
-import deleteClient from "../Api/client/delete";
-import newClient from "../Api/client/add";
-import updateClient from "../Api/client/update";
-import { Cliente } from "@/types";
-import DialogLoading from "../Utils/Dialog/Loading/page";
-import DialogError from "../Utils/Dialog/Error/page";
+import getAllVehicles from "../../Api/vehicle";
+import deleteVehicle from "../../Api/vehicle/delete";
+import newVehicle from "../../Api/vehicle/add";
+import updateVehicle from "../../Api/vehicle/update";
+import { Vehicle } from "@/types";
+import DialogLoading from "../../Utils/Dialog/Loading/page";
+import DialogError from "../../Utils/Dialog/Error/page";
 import { useMediaQuery } from "react-responsive";
 import { Container } from "./styles";
 import Row from "./Row";
-import { formFieldsClient } from "../Form/FormFields/client";
-import { datalistTypeDoc } from "../Form/FormFields/datalistTypeDoc";
+import { formFieldsVehicle } from "../../Form/FormFields/vehicle";
 
 export default function CollapsibleTable() {
-  const [clientes, setClientes] = useState<Cliente[]>([]);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(0);
@@ -46,12 +45,12 @@ export default function CollapsibleTable() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [deleteClientId, setDeleteClientId] = useState<number>(0);
-  const [deleteClientName, setDeleteClientName] = useState<string>("");
+  const [deleteVehicleId, setDeleteVehicleId] = useState<number>(0);
+  const [deleteVehicleName, setDeleteVehicleName] = useState<string>("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogCliente, setDialogCliente] = useState<any | null>(null);
+  const [dialogVehicle, setDialogVehicle] = useState<any | null>(null);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   useEffect(() => {
@@ -62,8 +61,8 @@ export default function CollapsibleTable() {
     setIsLoading(true);
     setIsError(false);
     try {
-      const data = await getAllClients();
-      setClientes(data);
+      const data = await getAllVehicles();
+      setVehicles(data);
     } catch (error) {
       setIsError(true);
     }
@@ -81,34 +80,34 @@ export default function CollapsibleTable() {
   };
 
   const handleAddNew = () => {
-    setDialogCliente(null);
+    setDialogVehicle(null);
     setDialogOpen(true);
   };
 
-  const handleEdit = (cliente: Cliente) => {
-    setDialogCliente(cliente);
+  const handleEdit = (vehicle: Vehicle) => {
+    setDialogVehicle(vehicle);
     setDialogOpen(true);
   };
 
-  const handleSave = async (cliente: Cliente) => {
+  const handleSave = async (vehicle: Vehicle) => {
     setDialogOpen(false);
 
     try {
-      if (cliente.id) {
-        await updateClient(cliente);
+      if (vehicle.id) {
+        await updateVehicle(vehicle);
         setSnackbarMessage(
-          `O cliente ${cliente.nome} foi atualizado com sucesso!`
+          `O veículo ${vehicle.placa} foi atualizado com sucesso!`
         );
       } else {
-        await newClient(cliente);
+        await newVehicle(vehicle);
         setSnackbarMessage(
-          `O cliente ${cliente.nome} foi cadastrado com sucesso!`
+          `O veículo ${vehicle.placa} foi cadastrado com sucesso!`
         );
       }
       setSnackbarOpen(true);
       fetchData();
     } catch (error) {
-      setSnackbarMessage(`Erro ao salvar cliente.`);
+      setSnackbarMessage(`Erro ao salvar veículo.`);
       setSnackbarOpen(true);
     }
   };
@@ -124,9 +123,9 @@ export default function CollapsibleTable() {
     setPage(0);
   };
 
-  const filterClientes = () => {
-    const filtered = clientes.filter((cliente) =>
-      Object.values(cliente).some((value) =>
+  const filterVehicles = () => {
+    const filtered = vehicles.filter((vehicle) =>
+      Object.values(vehicle).some((value) =>
         value.toString().toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
@@ -138,8 +137,8 @@ export default function CollapsibleTable() {
   };
 
   const handleDelete = async (id: number, nome: string) => {
-    setDeleteClientId(id);
-    setDeleteClientName(nome);
+    setDeleteVehicleId(id);
+    setDeleteVehicleName(nome);
     setDeleteDialogOpen(true);
   };
 
@@ -147,20 +146,20 @@ export default function CollapsibleTable() {
     setDeleteDialogOpen(false);
 
     try {
-      const response = await deleteClient(deleteClientId);
+      const response = await deleteVehicle(deleteVehicleId);
       if (response) {
         setSnackbarMessage(
-          `O usuário ${deleteClientName} foi excluído com sucesso!`
+          `O veículo ${deleteVehicleName} foi excluído com sucesso!`
         );
         setSnackbarOpen(true);
         fetchData();
       } else {
-        setSnackbarMessage(`Erro ao deletar usuário ${deleteClientName}.`);
+        setSnackbarMessage(`Erro ao deletar veículo ${deleteVehicleName}.`);
         setSnackbarOpen(true);
         fetchData();
       }
     } catch {
-      setSnackbarMessage(`Erro ao deletar usuário ${deleteClientName}.`);
+      setSnackbarMessage(`Erro ao deletar veículo ${deleteVehicleName}.`);
       setSnackbarOpen(true);
       fetchData();
     }
@@ -181,14 +180,14 @@ export default function CollapsibleTable() {
     return <DialogError error={isError} />;
   }
 
-  const filteredClientes = filterClientes();
+  const filteredVehicles = filterVehicles();
   const emptyRows =
     rowsPerPage -
-    Math.min(rowsPerPage, filteredClientes.length - page * rowsPerPage);
+    Math.min(rowsPerPage, filteredVehicles.length - page * rowsPerPage);
 
   return (
     <Container>
-      <TableContainer className="tableClient" component={Paper}>
+      <TableContainer className="tableVehicle" component={Paper}>
         <Grid
           container
           alignItems="center"
@@ -201,7 +200,7 @@ export default function CollapsibleTable() {
           }}
         >
           <Grid item>
-            <Typography variant="h6">Clientes</Typography>
+            <Typography variant="h6">Veículos</Typography>
           </Grid>
           <Grid item>
             <Grid container alignItems="center">
@@ -212,7 +211,7 @@ export default function CollapsibleTable() {
                 onClick={handleAddNew}
               >
                 <AddIcon />
-                <Typography>Novo Cliente</Typography>
+                <Typography>Novo Veículo</Typography>
               </IconButton>
               <TextField
                 label="Pesquisar"
@@ -245,15 +244,15 @@ export default function CollapsibleTable() {
                 </IconButton>
               </TableCell>
               <TableCell>
-                <strong>Nome</strong>
+                <strong>Placa</strong>
               </TableCell>
               <TableCell>
-                <strong>Cidade</strong>
+                <strong>Marca/Modelo</strong>
               </TableCell>
 
               {!isMobile && (
                 <TableCell>
-                  <strong>Uf</strong>
+                  <strong>Ano Fabricação</strong>
                 </TableCell>
               )}
 
@@ -263,12 +262,12 @@ export default function CollapsibleTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredClientes
+            {filteredVehicles
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((cliente) => (
+              .map((vehicle) => (
                 <Row
-                  key={cliente.id}
-                  row={cliente}
+                  key={vehicle.id}
+                  row={vehicle}
                   onDelete={handleDelete}
                   onEdit={handleEdit}
                 />
@@ -283,7 +282,7 @@ export default function CollapsibleTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={filteredClientes.length}
+          count={filteredVehicles.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -293,7 +292,7 @@ export default function CollapsibleTable() {
           <DialogTitle>Confirmação de exclusão</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Tem certeza que deseja excluir o cliente {deleteClientName}?
+              Tem certeza que deseja excluir o veículo {deleteVehicleName}?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -307,26 +306,28 @@ export default function CollapsibleTable() {
         </Dialog>
         <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
           <DialogTitle>
-            {dialogCliente ? "Editar cliente" : "Novo cliente"}
+            {dialogVehicle?.id ? "Editar veículo" : "Novo veículo"}
           </DialogTitle>
           <DialogContent>
             <DialogContentText>Preencha os campos abaixo:</DialogContentText>
-            {formFieldsClient.map((field) => {
-              const isEditingExistingClient = dialogCliente && dialogCliente.id;
+            {formFieldsVehicle.map((field) => {
+              const isEditingExistingVehicle =
+                dialogVehicle && dialogVehicle.id;
               const isNumeroDocumentoField = field.id === "numeroDocumento";
               const shouldRenderField =
-                !isEditingExistingClient || !isNumeroDocumentoField;
+                !isEditingExistingVehicle || !isNumeroDocumentoField;
               if (shouldRenderField) {
                 return (
                   <TextField
                     key={field.id}
                     id={field.id}
                     label={field.label}
+                    type={field.type ? field.type : "text"}
                     fullWidth
                     margin="normal"
-                    value={dialogCliente?.[field.id] ?? ""}
+                    value={dialogVehicle?.[field.id] ?? ""}
                     onChange={(e) =>
-                      setDialogCliente((prevState: any) => ({
+                      setDialogVehicle((prevState: any) => ({
                         ...prevState,
                         [field.id]: e.target.value,
                       }))
@@ -339,7 +340,7 @@ export default function CollapsibleTable() {
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setDialogOpen(false)}>Cancelar</Button>
-            <Button onClick={() => handleSave(dialogCliente)}>Salvar</Button>
+            <Button onClick={() => handleSave(dialogVehicle)}>Salvar</Button>
           </DialogActions>
         </Dialog>
         <Snackbar
