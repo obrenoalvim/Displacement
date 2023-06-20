@@ -16,6 +16,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 import styles from "./styles.module.scss";
 
+import {Container} from './styles';
+
 export default function Header() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -41,63 +43,66 @@ export default function Header() {
 
     return (
       <>
-        <Link href="/cliente">
-          <Typography variant="button" color="inherit" className={styles.link}>
-            Cliente
-          </Typography>
-        </Link>
-        <Link href="/condutor">
-          <Typography variant="button" color="inherit" className={styles.link}>
-            Condutor
-          </Typography>
-        </Link>
-        <Link href="/veiculo">
-          <Typography variant="button" color="inherit" className={styles.link}>
-            Veículo
-          </Typography>
-        </Link>
-        <Link href="/deslocamento">
-          <Typography variant="button" color="inherit" className={styles.link}>
-            Deslocamento
-          </Typography>
-        </Link>
+        <Container>
+          <Link href="/cliente">
+            <Typography variant="button" color="inherit" className="link">
+              Cliente
+            </Typography>
+          </Link>
+          <Link href="/condutor">
+            <Typography variant="button" color="inherit" className="link">
+              Condutor
+            </Typography>
+          </Link>
+          <Link href="/veiculo">
+            <Typography variant="button" color="inherit" className="link">
+              Veículo
+            </Typography>
+          </Link>
+          <Link href="/deslocamento">
+            <Typography variant="button" color="inherit" className="link">
+              Deslocamento
+            </Typography>
+          </Link>
+        </Container>
       </>
     );
   };
 
   return (
-    <AppBar position="static" className={styles.appBar}>
-      <Toolbar>
-        <Typography variant="h6" className={styles.logo}>
-          APPNATY
-        </Typography>
-
-        {renderLinks()}
-        <Drawer anchor="right" open={isMenuOpen} onClose={toggleMenu}>
-          <List>
-            <Link href="/cliente">
-              <ListItem button component="a" onClick={toggleMenu}>
-                <ListItemText primary="Cliente" />
-              </ListItem>
-            </Link>
-            <Link href="/Condutor">
-              <ListItem button component="a" onClick={toggleMenu}>
-                <ListItemText primary="Condutor" />
-              </ListItem>
-            </Link>
-            <Link href="/veiculo">
-              <ListItem button component="a" onClick={toggleMenu}>
-                <ListItemText primary="Veículo" />
-              </ListItem>
-            </Link>
-            <Link href="/Deslocamento">
-              <ListItem button component="a" onClick={toggleMenu}>
-                <ListItemText primary="Deslocamento" />
-              </ListItem>
-            </Link>
-          </List>
-        </Drawer>
-      </Toolbar>
-    </AppBar>
+    <Container>
+      <AppBar position="static" className="appBar">
+        <Toolbar>
+          <Typography variant="h6" className="logo">
+            APPNATY
+          </Typography>
+          {renderLinks()}
+          <Drawer anchor="right" open={isMenuOpen} onClose={toggleMenu}>
+            <List>
+              <Link href="/cliente">
+                <ListItem button component="a" onClick={toggleMenu}>
+                  <ListItemText primary="Cliente" />
+                </ListItem>
+              </Link>
+              <Link href="/Condutor">
+                <ListItem button component="a" onClick={toggleMenu}>
+                  <ListItemText primary="Condutor" />
+                </ListItem>
+              </Link>
+              <Link href="/veiculo">
+                <ListItem button component="a" onClick={toggleMenu}>
+                  <ListItemText primary="Veículo" />
+                </ListItem>
+              </Link>
+              <Link href="/Deslocamento">
+                <ListItem button component="a" onClick={toggleMenu}>
+                  <ListItemText primary="Deslocamento" />
+                </ListItem>
+              </Link>
+            </List>
+          </Drawer>
+        </Toolbar>
+      </AppBar>
+    </Container>
   );
 }
