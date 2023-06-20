@@ -22,7 +22,6 @@ import {
   DialogActions,
   Button,
   Snackbar,
-  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -40,6 +39,9 @@ import { Cliente } from "@/types";
 import DialogLoading from "../Utils/Dialog/Loading/page";
 import DialogError from "../Utils/Dialog/Error/page";
 
+import { useMediaQuery } from "react-responsive";
+
+
 import { Container } from "./styles";
 
 interface Props {
@@ -51,6 +53,8 @@ interface Props {
 function Row(props: Props) {
   const { row, onDelete, onEdit } = props;
   const [open, setOpen] = useState(false);
+
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   const handleDelete = () => {
     onDelete(row.id, row.nome);
@@ -75,9 +79,9 @@ function Row(props: Props) {
 
         <TableCell>{row.nome}</TableCell>
         <TableCell>{row.cidade}</TableCell>
-        {!useMediaQuery(useTheme().breakpoints.down("sm")) && (
-          <TableCell>{row.uf}</TableCell>
-        )}
+       
+ 
+        {!isMobile && <TableCell>{row.uf}</TableCell>}
 
         <TableCell>
           <IconButton aria-label="edit" onClick={handleEdit}>
@@ -135,6 +139,8 @@ export default function CollapsibleTable() {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogCliente, setDialogCliente] = useState<any | null>(null);
+
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   useEffect(() => {
     fetchData();
@@ -339,11 +345,9 @@ export default function CollapsibleTable() {
               <TableCell>
                 <strong>Cidade</strong>
               </TableCell>
-              {!/Mobi|Android/i.test(navigator.userAgent) && (
-                <TableCell>
-                  <strong>UF</strong>
-                </TableCell>
-              )}
+              
+              {!isMobile && <TableCell><strong>Uf</strong></TableCell>}
+              
               <TableCell>
                 <strong>Ações</strong>
               </TableCell>
