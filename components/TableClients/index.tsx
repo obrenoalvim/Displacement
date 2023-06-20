@@ -41,7 +41,6 @@ import DialogError from "../Utils/Dialog/Error/page";
 
 import { useMediaQuery } from "react-responsive";
 
-
 import { Container } from "./styles";
 
 interface Props {
@@ -79,8 +78,7 @@ function Row(props: Props) {
 
         <TableCell>{row.nome}</TableCell>
         <TableCell>{row.cidade}</TableCell>
-       
- 
+
         {!isMobile && <TableCell>{row.uf}</TableCell>}
 
         <TableCell>
@@ -106,6 +104,7 @@ function Row(props: Props) {
                     <TableCell>Nº Doc.</TableCell>
                     <TableCell>Logradouro</TableCell>
                     <TableCell>Bairro</TableCell>
+                    {isMobile && <TableCell>UF</TableCell>}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -113,6 +112,7 @@ function Row(props: Props) {
                     <TableCell>{row.numeroDocumento}</TableCell>
                     <TableCell>{row.logradouro}</TableCell>
                     <TableCell>{row.bairro}</TableCell>
+                    {isMobile && <TableCell>{row.uf}</TableCell>}
                   </TableRow>
                 </TableBody>
               </Table>
@@ -293,7 +293,11 @@ export default function CollapsibleTable() {
           alignItems="center"
           justifyContent="space-between"
           mb={2}
-          style={{ marginTop: "20px", paddingRight: "15px", paddingLeft: "15px" }}
+          style={{
+            marginTop: "20px",
+            paddingRight: "15px",
+            paddingLeft: "15px",
+          }}
         >
           <Grid item>
             <Typography variant="h6">Clientes</Typography>
@@ -345,9 +349,13 @@ export default function CollapsibleTable() {
               <TableCell>
                 <strong>Cidade</strong>
               </TableCell>
-              
-              {!isMobile && <TableCell><strong>Uf</strong></TableCell>}
-              
+
+              {!isMobile && (
+                <TableCell>
+                  <strong>Uf</strong>
+                </TableCell>
+              )}
+
               <TableCell>
                 <strong>Ações</strong>
               </TableCell>
