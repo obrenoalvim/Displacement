@@ -2,8 +2,11 @@
 import { useEffect } from "react";
 import ResponsiveAppBar from "../components/Header";
 import CollapsibleTable from "../components/TableClients";
-import getAllClients from "@/components/Api/cliente/page";
 export default async function Home() {
+  useEffect(() => {
+    window.location.href = '/cliente';
+  }, []);
+
   return (
     <>
       <ResponsiveAppBar />
