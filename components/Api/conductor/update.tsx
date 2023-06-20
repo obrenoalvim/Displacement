@@ -9,7 +9,7 @@ export default async function updateConductor(conductor: Conductor) {
     id: conductor.id,
     nome: conductor.nome,
     numeroHabilitacao: conductor.numeroHabilitacao,
-    categoriaHabilitacao: conductor.categoriaHabilitacao,
+    categoriaHabilitacao: conductor.catergoriaHabilitacao,
     vencimentoHabilitacao: conductor.vencimentoHabilitacao,
   });
 

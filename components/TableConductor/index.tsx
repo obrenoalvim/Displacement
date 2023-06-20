@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  Box,
-  Collapse,
   IconButton,
   Table,
   TableBody,
@@ -22,106 +20,24 @@ import {
   DialogActions,
   Button,
   Snackbar,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import SearchIcon from "@mui/icons-material/Search";
-import DeleteIcon from "@mui/icons-material/Delete";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import getAllClients from "../Api/client";
-import deleteClient from "../Api/client/delete";
-import newClient from "../Api/client/add";
-import updateClient from "../Api/client/update";
-import { Cliente } from "@/types";
+import getAllConductors from "../Api/conductor";
+import deleteConductor from "../Api/conductor/delete";
+import newConductor from "../Api/conductor/add";
+import updateConductor from "../Api/conductor/update";
+import { Conductor } from "@/types";
 import DialogLoading from "../Utils/Dialog/Loading/page";
 import DialogError from "../Utils/Dialog/Error/page";
-
-import { Container } from "../TableClients/styles";
-
-interface Props {
-  row: Cliente;
-  onDelete: (id: number, nome: string) => void;
-  onEdit: (cliente: Cliente) => void;
-}
-
-function Row(props: Props) {
-  const { row, onDelete, onEdit } = props;
-  const [open, setOpen] = useState(false);
-
-  const handleDelete = () => {
-    onDelete(row.id, row.nome);
-  };
-
-  const handleEdit = () => {
-    onEdit(row);
-  };
-
-  return (
-    <>
-      <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-        <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
-
-        <TableCell>{row.nome}</TableCell>
-        <TableCell>{row.cidade}</TableCell>
-        {!useMediaQuery(useTheme().breakpoints.down("sm")) && (
-          <TableCell>{row.uf}</TableCell>
-        )}
-
-        <TableCell>
-          <IconButton aria-label="edit" onClick={handleEdit}>
-            <EditIcon />
-          </IconButton>
-
-          <IconButton aria-label="delete" onClick={handleDelete}>
-            <DeleteIcon />
-          </IconButton>
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                Mais informações
-              </Typography>
-              <Table size="small" aria-label="purchases">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Nº Doc.</TableCell>
-                    <TableCell>Logradouro</TableCell>
-                    <TableCell>Bairro</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>{row.numeroDocumento}</TableCell>
-                    <TableCell>{row.logradouro}</TableCell>
-                    <TableCell>{row.bairro}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </>
-  );
-}
+import { useMediaQuery } from "react-responsive";
+import { Container } from "./styles";
+import Row from "./Row";
+import { formFieldsConductor } from "../Form/FormFields/conductor";
 
 export default function CollapsibleTable() {
-  const [clientes, setClientes] = useState<Cliente[]>([]);
+  const [conductors, setConductors] = useState<Conductor[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(0);
@@ -129,12 +45,13 @@ export default function CollapsibleTable() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [deleteClientId, setDeleteClientId] = useState<number>(0);
-  const [deleteClientName, setDeleteClientName] = useState<string>("");
+  const [deleteConductorId, setDeleteConductorId] = useState<number>(0);
+  const [deleteConductorName, setDeleteConductorName] = useState<string>("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogCliente, setDialogCliente] = useState<any | null>(null);
+  const [dialogConductor, setDialogConductor] = useState<any | null>(null);
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   useEffect(() => {
     fetchData();
@@ -144,8 +61,9 @@ export default function CollapsibleTable() {
     setIsLoading(true);
     setIsError(false);
     try {
-      const data = await getAllClients();
-      setClientes(data);
+      const data = await getAllConductors();
+      console.log(data)
+      setConductors(data);
     } catch (error) {
       setIsError(true);
     }
@@ -163,34 +81,34 @@ export default function CollapsibleTable() {
   };
 
   const handleAddNew = () => {
-    setDialogCliente(null);
+    setDialogConductor(null);
     setDialogOpen(true);
   };
 
-  const handleEdit = (cliente: Cliente) => {
-    setDialogCliente(cliente);
+  const handleEdit = (conductor: Conductor) => {
+    setDialogConductor(conductor);
     setDialogOpen(true);
   };
 
-  const handleSave = async (cliente: Cliente) => {
+  const handleSave = async (conductor: Conductor) => {
     setDialogOpen(false);
 
     try {
-      if (cliente.id) {
-        await updateClient(cliente);
+      if (conductor.id) {
+        await updateConductor(conductor);
         setSnackbarMessage(
-          `O cliente ${cliente.nome} foi atualizado com sucesso!`
+          `O condutor ${conductor.nome} foi atualizado com sucesso!`
         );
       } else {
-        await newClient(cliente);
+        await newConductor(conductor);
         setSnackbarMessage(
-          `O cliente ${cliente.nome} foi cadastrado com sucesso!`
+          `O condutor ${conductor.nome} foi cadastrado com sucesso!`
         );
       }
       setSnackbarOpen(true);
       fetchData();
     } catch (error) {
-      setSnackbarMessage(`Erro ao salvar cliente.`);
+      setSnackbarMessage(`Erro ao salvar condutor.`);
       setSnackbarOpen(true);
     }
   };
@@ -206,9 +124,9 @@ export default function CollapsibleTable() {
     setPage(0);
   };
 
-  const filterClientes = () => {
-    const filtered = clientes.filter((cliente) =>
-      Object.values(cliente).some((value) =>
+  const filterConductors = () => {
+    const filtered = conductors.filter((conductor) =>
+      Object.values(conductor).some((value) =>
         value.toString().toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
@@ -220,8 +138,8 @@ export default function CollapsibleTable() {
   };
 
   const handleDelete = async (id: number, nome: string) => {
-    setDeleteClientId(id);
-    setDeleteClientName(nome);
+    setDeleteConductorId(id);
+    setDeleteConductorName(nome);
     setDeleteDialogOpen(true);
   };
 
@@ -229,20 +147,20 @@ export default function CollapsibleTable() {
     setDeleteDialogOpen(false);
 
     try {
-      const response = await deleteClient(deleteClientId);
+      const response = await deleteConductor(deleteConductorId);
       if (response) {
         setSnackbarMessage(
-          `O usuário ${deleteClientName} foi excluído com sucesso!`
+          `O condutor ${deleteConductorName} foi excluído com sucesso!`
         );
         setSnackbarOpen(true);
         fetchData();
       } else {
-        setSnackbarMessage(`Erro ao deletar usuário ${deleteClientName}.`);
+        setSnackbarMessage(`Erro ao deletar condutor ${deleteConductorName}.`);
         setSnackbarOpen(true);
         fetchData();
       }
     } catch {
-      setSnackbarMessage(`Erro ao deletar usuário ${deleteClientName}.`);
+      setSnackbarMessage(`Erro ao deletar condutor ${deleteConductorName}.`);
       setSnackbarOpen(true);
       fetchData();
     }
@@ -263,34 +181,27 @@ export default function CollapsibleTable() {
     return <DialogError error={isError} />;
   }
 
-  const filteredClientes = filterClientes();
+  const filteredConductors = filterConductors();
   const emptyRows =
     rowsPerPage -
-    Math.min(rowsPerPage, filteredClientes.length - page * rowsPerPage);
-
-  const formFields = [
-    { id: "numeroDocumento", label: "Número do Documento" },
-    { id: "tipoDocumento", label: "Tipo do Documento" },
-    { id: "nome", label: "Nome" },
-    { id: "logradouro", label: "Logradouro" },
-    { id: "numero", label: "Número" },
-    { id: "bairro", label: "Bairro" },
-    { id: "cidade", label: "Cidade" },
-    { id: "uf", label: "UF" },
-  ];
+    Math.min(rowsPerPage, filteredConductors.length - page * rowsPerPage);
 
   return (
     <Container>
-      <TableContainer className="tableClient" component={Paper}>
+      <TableContainer className="tableConductor" component={Paper}>
         <Grid
           container
           alignItems="center"
           justifyContent="space-between"
           mb={2}
-          className="grid"
+          style={{
+            marginTop: "20px",
+            paddingRight: "15px",
+            paddingLeft: "15px",
+          }}
         >
           <Grid item>
-            <Typography variant="h6">Clientes</Typography>
+            <Typography variant="h6">Condutores</Typography>
           </Grid>
           <Grid item>
             <Grid container alignItems="center">
@@ -301,7 +212,7 @@ export default function CollapsibleTable() {
                 onClick={handleAddNew}
               >
                 <AddIcon />
-                <Typography>Novo Cliente</Typography>
+                <Typography>Novo Condutor</Typography>
               </IconButton>
               <TextField
                 label="Pesquisar"
@@ -337,25 +248,27 @@ export default function CollapsibleTable() {
                 <strong>Nome</strong>
               </TableCell>
               <TableCell>
-                <strong>Cidade</strong>
+                <strong>Categoria</strong>
               </TableCell>
-              {!/Mobi|Android/i.test(navigator.userAgent) && (
+
+              {!isMobile && (
                 <TableCell>
-                  <strong>UF</strong>
+                  <strong>Nº Habilitação</strong>
                 </TableCell>
               )}
+
               <TableCell>
                 <strong>Ações</strong>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredClientes
+            {filteredConductors
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((cliente) => (
+              .map((conductor) => (
                 <Row
-                  key={cliente.id}
-                  row={cliente}
+                  key={conductor.id}
+                  row={conductor}
                   onDelete={handleDelete}
                   onEdit={handleEdit}
                 />
@@ -370,7 +283,7 @@ export default function CollapsibleTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={filteredClientes.length}
+          count={filteredConductors.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -380,7 +293,7 @@ export default function CollapsibleTable() {
           <DialogTitle>Confirmação de exclusão</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Tem certeza que deseja excluir o cliente {deleteClientName}?
+              Tem certeza que deseja excluir o condutor {deleteConductorName}?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -394,26 +307,28 @@ export default function CollapsibleTable() {
         </Dialog>
         <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
           <DialogTitle>
-            {dialogCliente ? "Editar cliente" : "Novo cliente"}
+            {dialogConductor?.id ? "Editar condutor" : "Novo condutor"}
           </DialogTitle>
           <DialogContent>
             <DialogContentText>Preencha os campos abaixo:</DialogContentText>
-            {formFields.map((field) => {
-              const isEditingExistingClient = dialogCliente && dialogCliente.id;
+            {formFieldsConductor.map((field) => {
+              const isEditingExistingConductor =
+                dialogConductor && dialogConductor.id;
               const isNumeroDocumentoField = field.id === "numeroDocumento";
               const shouldRenderField =
-                !isEditingExistingClient || !isNumeroDocumentoField;
+                !isEditingExistingConductor || !isNumeroDocumentoField;
               if (shouldRenderField) {
                 return (
                   <TextField
                     key={field.id}
                     id={field.id}
                     label={field.label}
+                    type={field.type ? field.type : "text"}
                     fullWidth
                     margin="normal"
-                    value={dialogCliente?.[field.id] ?? ""}
+                    value={dialogConductor?.[field.id] ?? ""}
                     onChange={(e) =>
-                      setDialogCliente((prevState: any) => ({
+                      setDialogConductor((prevState: any) => ({
                         ...prevState,
                         [field.id]: e.target.value,
                       }))
@@ -426,7 +341,7 @@ export default function CollapsibleTable() {
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setDialogOpen(false)}>Cancelar</Button>
-            <Button onClick={() => handleSave(dialogCliente)}>Salvar</Button>
+            <Button onClick={() => handleSave(dialogConductor)}>Salvar</Button>
           </DialogActions>
         </Dialog>
         <Snackbar

@@ -6,7 +6,7 @@ export default async function newConductor(
   const body = {
     "nome": conductor.nome,
     "numeroHabilitacao": conductor.numeroHabilitacao,
-    "categoriaHabilitacao": conductor.categoriaHabilitacao,
+    "categoriaHabilitacao": conductor.catergoriaHabilitacao,
     "vencimentoHabilitacao": conductor.vencimentoHabilitacao
   };
 
