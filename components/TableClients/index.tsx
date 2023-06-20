@@ -32,7 +32,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import getAllClients from "../Api/cliente/page";
+import getAllClients from "../Api/cliente";
 import deleteClient from "../Api/cliente/delete";
 import newClient from "../Api/cliente/add";
 import updateClient from "../Api/cliente/update";

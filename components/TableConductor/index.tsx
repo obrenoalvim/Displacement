@@ -32,14 +32,15 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-import styles from "./styles.module.scss";
-import getAllClients from "../Api/cliente/page";
+import getAllClients from "../Api/cliente";
 import deleteClient from "../Api/cliente/delete";
 import newClient from "../Api/cliente/add";
 import updateClient from "../Api/cliente/update";
 import { Cliente } from "@/types";
 import DialogLoading from "../Utils/Dialog/Loading/page";
 import DialogError from "../Utils/Dialog/Error/page";
+
+import { Container } from "../TableClients/styles";
 
 interface Props {
   row: Cliente;
@@ -227,24 +228,23 @@ export default function CollapsibleTable() {
   const handleConfirmDelete = async () => {
     setDeleteDialogOpen(false);
 
-
     try {
-      const response = await deleteClient(deleteClientId)
-      if(response){
+      const response = await deleteClient(deleteClientId);
+      if (response) {
         setSnackbarMessage(
           `O usuário ${deleteClientName} foi excluído com sucesso!`
         );
-        setSnackbarOpen(true)
-        fetchData()
-    } else {
-      setSnackbarMessage(`Erro ao deletar usuário ${deleteClientName}.`);
-      setSnackbarOpen(true)
-      fetchData()
-    }
+        setSnackbarOpen(true);
+        fetchData();
+      } else {
+        setSnackbarMessage(`Erro ao deletar usuário ${deleteClientName}.`);
+        setSnackbarOpen(true);
+        fetchData();
+      }
     } catch {
       setSnackbarMessage(`Erro ao deletar usuário ${deleteClientName}.`);
-      setSnackbarOpen(true)
-      fetchData()
+      setSnackbarOpen(true);
+      fetchData();
     }
   };
 
@@ -280,170 +280,162 @@ export default function CollapsibleTable() {
   ];
 
   return (
-    <TableContainer className={styles.tableClient} component={Paper}>
-      <Grid
-        container
-        alignItems="center"
-        justifyContent="space-between"
-        mb={2}
-        style={{ marginTop: "20px", paddingRight: "15px", paddingLeft: "15px" }}
-      >
-        <Grid item>
-          <Typography variant="h6">Clientes</Typography>
-        </Grid>
-        <Grid item>
-          <Grid container alignItems="center">
-            <IconButton
-              className={styles.buttonNew}
-              aria-label="add"
-              color="primary"
-              onClick={handleAddNew}
-            >
-              <AddIcon />
-              <Typography>Novo Cliente</Typography>
-            </IconButton>
-            <TextField
-              label="Pesquisar"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              variant="outlined"
-              size="small"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
+    <Container>
+      <TableContainer className="tableClient" component={Paper}>
+        <Grid
+          container
+          alignItems="center"
+          justifyContent="space-between"
+          mb={2}
+          className="grid"
+        >
+          <Grid item>
+            <Typography variant="h6">Clientes</Typography>
+          </Grid>
+          <Grid item>
+            <Grid container alignItems="center">
+              <IconButton
+                className="buttonNew"
+                aria-label="add"
+                color="primary"
+                onClick={handleAddNew}
+              >
+                <AddIcon />
+                <Typography>Novo Cliente</Typography>
+              </IconButton>
+              <TextField
+                label="Pesquisar"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                variant="outlined"
+                size="small"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell>
-              <IconButton
-                aria-label="update"
-                color="primary"
-                disabled={isUpdating}
-                onClick={handleUpdate}
-              >
-                <RefreshIcon />
-              </IconButton>
-            </TableCell>
-            <TableCell>
-              <strong>Nome</strong>
-            </TableCell>
-            <TableCell>
-              <strong>Cidade</strong>
-            </TableCell>
-            {!/Mobi|Android/i.test(navigator.userAgent) && (
+        <Table aria-label="collapsible table">
+          <TableHead>
+            <TableRow>
               <TableCell>
-                <strong>UF</strong>
+                <IconButton
+                  aria-label="update"
+                  color="primary"
+                  disabled={isUpdating}
+                  onClick={handleUpdate}
+                >
+                  <RefreshIcon />
+                </IconButton>
               </TableCell>
-            )}
-            <TableCell>
-              <strong>Ações</strong>
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {filteredClientes
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((cliente) => (
-              <Row
-                key={cliente.id}
-                row={cliente}
-                onDelete={handleDelete}
-                onEdit={handleEdit}
-              />
-            ))}
-          {emptyRows > 0 && (
-            <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={6} />
+              <TableCell>
+                <strong>Nome</strong>
+              </TableCell>
+              <TableCell>
+                <strong>Cidade</strong>
+              </TableCell>
+              {!/Mobi|Android/i.test(navigator.userAgent) && (
+                <TableCell>
+                  <strong>UF</strong>
+                </TableCell>
+              )}
+              <TableCell>
+                <strong>Ações</strong>
+              </TableCell>
             </TableRow>
-          )}
-        </TableBody>
-      </Table>
-
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={filteredClientes.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-
-      <Dialog open={deleteDialogOpen} onClose={handleCancelDelete}>
-        <DialogTitle>Confirmação de exclusão</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Tem certeza que deseja excluir o cliente {deleteClientName}?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancelDelete} color="primary">
-            Cancelar
-          </Button>
-          <Button onClick={handleConfirmDelete} color="primary" autoFocus>
-            Confirmar
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <DialogTitle>
-          {dialogCliente ? "Editar cliente" : "Novo cliente"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>Preencha os campos abaixo:</DialogContentText>
-          {formFields.map((field) => {
-            const isEditingExistingClient = dialogCliente && dialogCliente.id;
-            const isNumeroDocumentoField = field.id === "numeroDocumento";
-            const shouldRenderField =
-              !isEditingExistingClient || !isNumeroDocumentoField;
-            if (shouldRenderField) {
-              return (
-
-
-<TextField
-  key={field.id}
-  id={field.id}
-  label={field.label}
-  fullWidth
-  margin="normal"
-  value={dialogCliente?.[field.id] ?? ""}
-  onChange={(e) =>
-    setDialogCliente((prevState: any) => ({
-      ...prevState,
-      [field.id]: e.target.value,
-    }))
-  }
-/>
-
-
-              );
-            }
-
-            return null;
-          })}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDialogOpen(false)}>Cancelar</Button>
-          <Button onClick={() => handleSave(dialogCliente)}>Salvar</Button>
-        </DialogActions>
-      </Dialog>
-
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={5000}
-        onClose={handleCloseSnackbar}
-        message={snackbarMessage}
-      />
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {filteredClientes
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((cliente) => (
+                <Row
+                  key={cliente.id}
+                  row={cliente}
+                  onDelete={handleDelete}
+                  onEdit={handleEdit}
+                />
+              ))}
+            {emptyRows > 0 && (
+              <TableRow style={{ height: 53 * emptyRows }}>
+                <TableCell colSpan={6} />
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={filteredClientes.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+        <Dialog open={deleteDialogOpen} onClose={handleCancelDelete}>
+          <DialogTitle>Confirmação de exclusão</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Tem certeza que deseja excluir o cliente {deleteClientName}?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancelDelete} color="primary">
+              Cancelar
+            </Button>
+            <Button onClick={handleConfirmDelete} color="primary" autoFocus>
+              Confirmar
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+          <DialogTitle>
+            {dialogCliente ? "Editar cliente" : "Novo cliente"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>Preencha os campos abaixo:</DialogContentText>
+            {formFields.map((field) => {
+              const isEditingExistingClient = dialogCliente && dialogCliente.id;
+              const isNumeroDocumentoField = field.id === "numeroDocumento";
+              const shouldRenderField =
+                !isEditingExistingClient || !isNumeroDocumentoField;
+              if (shouldRenderField) {
+                return (
+                  <TextField
+                    key={field.id}
+                    id={field.id}
+                    label={field.label}
+                    fullWidth
+                    margin="normal"
+                    value={dialogCliente?.[field.id] ?? ""}
+                    onChange={(e) =>
+                      setDialogCliente((prevState: any) => ({
+                        ...prevState,
+                        [field.id]: e.target.value,
+                      }))
+                    }
+                  />
+                );
+              }
+              return null;
+            })}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDialogOpen(false)}>Cancelar</Button>
+            <Button onClick={() => handleSave(dialogCliente)}>Salvar</Button>
+          </DialogActions>
+        </Dialog>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={5000}
+          onClose={handleCloseSnackbar}
+          message={snackbarMessage}
+        />
+      </TableContainer>
+    </Container>
   );
 }
