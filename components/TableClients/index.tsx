@@ -35,6 +35,7 @@ import { useMediaQuery } from "react-responsive";
 import { Container } from "./styles";
 import Row from "./Row";
 import { formFieldsClient } from "../Form/FormFields/client";
+import { datalistTypeDoc } from "../Form/FormFields/datalistTypeDoc";
 
 export default function CollapsibleTable() {
   const [clientes, setClientes] = useState<Cliente[]>([]);
