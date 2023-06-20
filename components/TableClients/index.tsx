@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  Box,
-  Collapse,
   IconButton,
   Table,
   TableBody,
@@ -22,15 +20,10 @@ import {
   DialogActions,
   Button,
   Snackbar,
-  useTheme,
 } from "@mui/material";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import SearchIcon from "@mui/icons-material/Search";
-import DeleteIcon from "@mui/icons-material/Delete";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
 import getAllClients from "../Api/client";
 import deleteClient from "../Api/client/delete";
 import newClient from "../Api/client/add";
@@ -38,91 +31,10 @@ import updateClient from "../Api/client/update";
 import { Cliente } from "@/types";
 import DialogLoading from "../Utils/Dialog/Loading/page";
 import DialogError from "../Utils/Dialog/Error/page";
-
 import { useMediaQuery } from "react-responsive";
-
 import { Container } from "./styles";
-
-interface Props {
-  row: Cliente;
-  onDelete: (id: number, nome: string) => void;
-  onEdit: (cliente: Cliente) => void;
-}
-
-function Row(props: Props) {
-  const { row, onDelete, onEdit } = props;
-  const [open, setOpen] = useState(false);
-
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-
-  const handleDelete = () => {
-    onDelete(row.id, row.nome);
-  };
-
-  const handleEdit = () => {
-    onEdit(row);
-  };
-
-  return (
-    <>
-      <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-        <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
-
-        <TableCell>{row.nome}</TableCell>
-        <TableCell>{row.cidade}</TableCell>
-
-        {!isMobile && <TableCell>{row.uf}</TableCell>}
-
-        <TableCell>
-          <IconButton aria-label="edit" onClick={handleEdit}>
-            <EditIcon />
-          </IconButton>
-
-          <IconButton aria-label="delete" onClick={handleDelete}>
-            <DeleteIcon />
-          </IconButton>
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                Mais informações
-              </Typography>
-              <Table size="small" aria-label="purchases">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Nº Doc.</TableCell>
-                    <TableCell>Logradouro</TableCell>
-                    <TableCell>Bairro</TableCell>
-                    {isMobile && <TableCell>UF</TableCell>}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>{row.numeroDocumento}</TableCell>
-                    <TableCell>{row.logradouro}</TableCell>
-                    <TableCell>{row.bairro}</TableCell>
-                    {isMobile && <TableCell>{row.uf}</TableCell>}
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </>
-  );
-}
+import Row from "./Row";
+import { formFieldsClient } from "../Form/FormFields/client";
 
 export default function CollapsibleTable() {
   const [clientes, setClientes] = useState<Cliente[]>([]);
@@ -139,7 +51,6 @@ export default function CollapsibleTable() {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogCliente, setDialogCliente] = useState<any | null>(null);
-
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   useEffect(() => {
@@ -274,17 +185,6 @@ export default function CollapsibleTable() {
     rowsPerPage -
     Math.min(rowsPerPage, filteredClientes.length - page * rowsPerPage);
 
-  const formFields = [
-    { id: "numeroDocumento", label: "Número do Documento" },
-    { id: "tipoDocumento", label: "Tipo do Documento" },
-    { id: "nome", label: "Nome" },
-    { id: "logradouro", label: "Logradouro" },
-    { id: "numero", label: "Número" },
-    { id: "bairro", label: "Bairro" },
-    { id: "cidade", label: "Cidade" },
-    { id: "uf", label: "UF" },
-  ];
-
   return (
     <Container>
       <TableContainer className="tableClient" component={Paper}>
@@ -410,7 +310,7 @@ export default function CollapsibleTable() {
           </DialogTitle>
           <DialogContent>
             <DialogContentText>Preencha os campos abaixo:</DialogContentText>
-            {formFields.map((field) => {
+            {formFieldsClient.map((field) => {
               const isEditingExistingClient = dialogCliente && dialogCliente.id;
               const isNumeroDocumentoField = field.id === "numeroDocumento";
               const shouldRenderField =
