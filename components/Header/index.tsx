@@ -14,8 +14,6 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-import styles from "./styles.module.scss";
-
 import {Container} from './styles';
 
 export default function Header() {

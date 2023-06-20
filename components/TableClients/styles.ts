@@ -1,3 +1,7 @@
+import styled from 'styled-components';
+
+export const Container = styled.header`
+
 .tableClient {
   margin-top: 20px;
   width: 90%;
@@ -39,3 +43,6 @@
   overflow-x: auto;
   }
   }
+
+
+`
