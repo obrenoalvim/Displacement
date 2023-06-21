@@ -70,7 +70,11 @@ export default function Homepage() {
     { title: "Clientes", url: "/cliente", badgeContent: clientCount },
     { title: "Veículos", url: "/veiculo", badgeContent: vehicleCount },
     { title: "Condutores", url: "/condutor", badgeContent: conductorCount },
-    { title: "Deslocamento", url: "/deslocamento", badgeContent: displacementCount },
+    {
+      title: "Deslocamento",
+      url: "/deslocamento",
+      badgeContent: displacementCount,
+    },
   ];
 
   return (
