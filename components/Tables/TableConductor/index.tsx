@@ -32,7 +32,7 @@ import { Conductor } from "@/types";
 import DialogLoading from "../../Utils/Dialog/Loading/page";
 import DialogError from "../../Utils/Dialog/Error/page";
 import { useMediaQuery } from "react-responsive";
-import { Container } from "./styles";
+import { Container } from "../TableStyle/styles";
 import Row from "./Row";
 import { formFieldsConductor } from "../../Form/FormFields/conductor";
 
@@ -188,7 +188,7 @@ export default function CollapsibleTable() {
 
   return (
     <Container>
-      <TableContainer className="tableConductor" component={Paper}>
+      <TableContainer className="table" component={Paper}>
         <Grid
           container
           alignItems="center"

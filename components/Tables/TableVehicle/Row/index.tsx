@@ -81,7 +81,7 @@ export default function Row(props: Props) {
                 </TableHead>
                 <TableBody>
                   <TableRow>
-                    <TableCell>{row.kmAtual}</TableCell>
+                    <TableCell>{row.kmAtual.toLocaleString()}</TableCell>
                     {isMobile && <TableCell>{row.anoFabricacao}</TableCell>}
                   </TableRow>
                 </TableBody>

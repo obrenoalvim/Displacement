@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.header`
-  .tableVehicle {
+  .table {
     margin-top: 20px;
     width: 90%;
     margin-left: auto;
@@ -9,36 +9,36 @@ export const Container = styled.header`
     margin-bottom: 150px;
   }
 
-  .tableVehicle .buttonNew {
+  .table .buttonNew {
     border: 1px solid #3f51b5;
     border-radius: 5px;
     margin: 15px;
   }
 
-  .tableVehicle .MuiButton-containedPrimary {
+  .table .MuiButton-containedPrimary {
     background-color: #3f51b5;
-    color: #fff;
+    color: var(--white);
   }
 
-  .tableVehicle .MuiButton-containedPrimary:hover {
+  .table .MuiButton-containedPrimary:hover {
     background-color: #303f9f;
   }
 
-  .tableVehicle .MuiTableCell-head {
+  .table .MuiTableCell-head {
     font-weight: bold;
   }
 
-  .tableVehicle .MuiTableRow-root.Mui-selected,
-  .tableVehicle .MuiTableRow-root.Mui-selected:hover {
+  .table .MuiTableRow-root.Mui-selected,
+  .table .MuiTableRow-root.Mui-selected:hover {
     background-color: #e8eaf6;
   }
 
   @media (max-width: 768px) {
-    .tableVehicle {
+    .table {
       width: 100%;
     }
 
-    .tableVehicle .MuiTableContainer-root {
+    .table .MuiTableContainer-root {
       overflow-x: auto;
     }
   }

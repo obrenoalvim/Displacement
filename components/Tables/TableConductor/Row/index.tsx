@@ -16,6 +16,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { format } from 'date-fns';
 
 interface Props {
   row: Conductor;
@@ -81,11 +82,11 @@ export default function Row(props: Props) {
                 </TableHead>
                 <TableBody>
                   <TableRow>
-                    <TableCell>{row.vencimentoHabilitacao}</TableCell>
+                    <TableCell>{format(new Date(row.vencimentoHabilitacao), 'dd/MM/yyyy') }</TableCell>
                     {isMobile && <TableCell>{row.numeroHabilitacao}</TableCell>}
                   </TableRow>
                 </TableBody>
-              </Table>
+              </Table>  
             </Box>
           </Collapse>
         </TableCell>

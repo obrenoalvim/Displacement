@@ -32,7 +32,7 @@ import { Cliente } from "@/types";
 import DialogLoading from "../../Utils/Dialog/Loading/page";
 import DialogError from "../../Utils/Dialog/Error/page";
 import { useMediaQuery } from "react-responsive";
-import { Container } from "./styles";
+import { Container } from "../TableStyle/styles";
 import Row from "./Row";
 import { formFieldsClient } from "../../Form/FormFields/client";
 import { datalistTypeDoc } from "../../Form/FormFields/datalistTypeDoc";
@@ -188,7 +188,7 @@ export default function CollapsibleTable() {
 
   return (
     <Container>
-      <TableContainer className="tableClient" component={Paper}>
+      <TableContainer className="table" component={Paper}>
         <Grid
           container
           alignItems="center"
