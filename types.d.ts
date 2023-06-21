@@ -25,3 +25,15 @@ export interface Vehicle {
   anoFabricacao: number;
   kmAtual: number;
 }
+
+export interface Displacement {
+  id: number;
+  kmInicial: number;
+  inicioDeslocamento: string;
+  checkList: string;
+  motivo: string;
+  observacao: string;
+  idCondutor: number;
+  idVeiculo: number;
+  idCliente: number;
+}
