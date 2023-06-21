@@ -1,4 +1,4 @@
-export interface Cliente {
+export interface Client {
   id: number;
   numeroDocumento: string;
   tipoDocumento: string;

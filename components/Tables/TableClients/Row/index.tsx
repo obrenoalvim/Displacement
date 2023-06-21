@@ -1,4 +1,4 @@
-import { Cliente } from "@/types";
+import { Client } from "@/types";
 import {
   Box,
   Collapse,
@@ -18,9 +18,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
 interface Props {
-  row: Cliente;
+  row: Client;
   onDelete: (id: number, nome: string) => void;
-  onEdit: (cliente: Cliente) => void;
+  onEdit: (cliente: Client) => void;
 }
 
 export default function Row(props: Props) {

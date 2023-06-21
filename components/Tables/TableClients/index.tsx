@@ -28,17 +28,17 @@ import getAllClients from "../../Api/client";
 import deleteClient from "../../Api/client/delete";
 import newClient from "../../Api/client/add";
 import updateClient from "../../Api/client/update";
-import { Cliente } from "@/types";
+import { Client } from "@/types";
 import DialogLoading from "../../Utils/Dialog/Loading/page";
 import DialogError from "../../Utils/Dialog/Error/page";
 import { useMediaQuery } from "react-responsive";
 import { Container } from "../TableStyle/styles";
 import Row from "./Row";
 import { formFieldsClient } from "../../Form/FormFields/client";
-import { datalistTypeDoc } from "../../Form/FormFields/datalistTypeDoc";
-
 export default function CollapsibleTable() {
-  const [clientes, setClientes] = useState<Cliente[]>([]);
+
+  
+  const [clients, setClients] = useState<Client[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(0);
@@ -51,7 +51,8 @@ export default function CollapsibleTable() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogCliente, setDialogCliente] = useState<any | null>(null);
+  const [dialogClient, setDialogClient] = useState<any | null>(null);
+
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   useEffect(() => {
@@ -63,7 +64,7 @@ export default function CollapsibleTable() {
     setIsError(false);
     try {
       const data = await getAllClients();
-      setClientes(data);
+      setClients(data);
     } catch (error) {
       setIsError(true);
     }
@@ -81,28 +82,28 @@ export default function CollapsibleTable() {
   };
 
   const handleAddNew = () => {
-    setDialogCliente(null);
+    setDialogClient(null);
     setDialogOpen(true);
   };
 
-  const handleEdit = (cliente: Cliente) => {
-    setDialogCliente(cliente);
+  const handleEdit = (client: Client) => {
+    setDialogClient(client);
     setDialogOpen(true);
   };
 
-  const handleSave = async (cliente: Cliente) => {
+  const handleSave = async (client: Client) => {
     setDialogOpen(false);
 
     try {
-      if (cliente.id) {
-        await updateClient(cliente);
+      if (client.id) {
+        await updateClient(client);
         setSnackbarMessage(
-          `O cliente ${cliente.nome} foi atualizado com sucesso!`
+          `O cliente ${client.nome} foi atualizado com sucesso!`
         );
       } else {
-        await newClient(cliente);
+        await newClient(client);
         setSnackbarMessage(
-          `O cliente ${cliente.nome} foi cadastrado com sucesso!`
+          `O cliente ${client.nome} foi cadastrado com sucesso!`
         );
       }
       setSnackbarOpen(true);
@@ -124,9 +125,9 @@ export default function CollapsibleTable() {
     setPage(0);
   };
 
-  const filterClientes = () => {
-    const filtered = clientes.filter((cliente) =>
-      Object.values(cliente).some((value) =>
+  const filterClients = () => {
+    const filtered = clients.filter((client) =>
+      Object.values(client).some((value) =>
         value.toString().toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
@@ -150,17 +151,17 @@ export default function CollapsibleTable() {
       const response = await deleteClient(deleteClientId);
       if (response) {
         setSnackbarMessage(
-          `O usuário ${deleteClientName} foi excluído com sucesso!`
+          `O cliente ${deleteClientName} foi excluído com sucesso!`
         );
         setSnackbarOpen(true);
         fetchData();
       } else {
-        setSnackbarMessage(`Erro ao deletar usuário ${deleteClientName}.`);
+        setSnackbarMessage(`Erro ao deletar cliente ${deleteClientName}.`);
         setSnackbarOpen(true);
         fetchData();
       }
     } catch {
-      setSnackbarMessage(`Erro ao deletar usuário ${deleteClientName}.`);
+      setSnackbarMessage(`Erro ao deletar cliente ${deleteClientName}.`);
       setSnackbarOpen(true);
       fetchData();
     }
@@ -181,10 +182,10 @@ export default function CollapsibleTable() {
     return <DialogError error={isError} />;
   }
 
-  const filteredClientes = filterClientes();
+  const filteredClients = filterClients();
   const emptyRows =
     rowsPerPage -
-    Math.min(rowsPerPage, filteredClientes.length - page * rowsPerPage);
+    Math.min(rowsPerPage, filteredClients.length - page * rowsPerPage);
 
   return (
     <Container>
@@ -263,12 +264,12 @@ export default function CollapsibleTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredClientes
+            {filteredClients
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((cliente) => (
+              .map((client) => (
                 <Row
-                  key={cliente.id}
-                  row={cliente}
+                  key={client.id}
+                  row={client}
                   onDelete={handleDelete}
                   onEdit={handleEdit}
                 />
@@ -283,7 +284,7 @@ export default function CollapsibleTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={filteredClientes.length}
+          count={filteredClients.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -307,12 +308,12 @@ export default function CollapsibleTable() {
         </Dialog>
         <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
           <DialogTitle>
-            {dialogCliente ? "Editar cliente" : "Novo cliente"}
+            {dialogClient ? "Editar cliente" : "Novo cliente"}
           </DialogTitle>
           <DialogContent>
             <DialogContentText>Preencha os campos abaixo:</DialogContentText>
             {formFieldsClient.map((field) => {
-              const isEditingExistingClient = dialogCliente && dialogCliente.id;
+              const isEditingExistingClient = dialogClient && dialogClient.id;
               const isNumeroDocumentoField = field.id === "numeroDocumento";
               const shouldRenderField =
                 !isEditingExistingClient || !isNumeroDocumentoField;
@@ -324,9 +325,9 @@ export default function CollapsibleTable() {
                     label={field.label}
                     fullWidth
                     margin="normal"
-                    value={dialogCliente?.[field.id] ?? ""}
+                    value={dialogClient?.[field.id] ?? ""}
                     onChange={(e) =>
-                      setDialogCliente((prevState: any) => ({
+                      setDialogClient((prevState: any) => ({
                         ...prevState,
                         [field.id]: e.target.value,
                       }))
@@ -339,7 +340,7 @@ export default function CollapsibleTable() {
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setDialogOpen(false)}>Cancelar</Button>
-            <Button onClick={() => handleSave(dialogCliente)}>Salvar</Button>
+            <Button onClick={() => handleSave(dialogClient)}>Salvar</Button>
           </DialogActions>
         </Dialog>
         <Snackbar

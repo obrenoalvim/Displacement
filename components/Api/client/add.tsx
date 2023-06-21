@@ -1,17 +1,17 @@
 import { environment } from "@/environments/environments";
-import { Cliente } from "@/types";
+import { Client } from "@/types";
 export default async function newClient(
-  cliente: Cliente
+  client: Client
 ) {
   const body = {
-    "numeroDocumento": cliente.numeroDocumento,
-    "tipoDocumento": cliente.tipoDocumento,
-    "nome": cliente.nome,
-    "logradouro": cliente.logradouro,
-    "numero": cliente.numero,
-    "bairro": cliente.bairro,
-    "cidade": cliente.cidade,
-    "uf": cliente.uf,
+    "numeroDocumento": client.numeroDocumento,
+    "tipoDocumento": client.tipoDocumento,
+    "nome": client.nome,
+    "logradouro": client.logradouro,
+    "numero": client.numero,
+    "bairro": client.bairro,
+    "cidade": client.cidade,
+    "uf": client.uf,
   };
 
   const response = await fetch(
