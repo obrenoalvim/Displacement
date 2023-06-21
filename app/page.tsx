@@ -1,18 +1,11 @@
 "use client";
 import Seo from "@/components/Seo";
-import { useEffect } from "react";
-import ResponsiveAppBar from "../components/Header";
-import CollapsibleTable from "../components/Tables/TableClients";
+import HomePage from '../components/Home';
 export default async function Home() {
-  useEffect(() => {
-    window.location.href = '/cliente';
-  }, []);
-
   return (
     <>
-    <Seo/>
-      <ResponsiveAppBar />
-      <CollapsibleTable />
+     <Seo/>
+      <HomePage/>
     </>
   );
 }

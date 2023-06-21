@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Container = styled.header`
+export const Container = styled.main`
   .table {
     margin-top: 20px;
     width: 90%;
