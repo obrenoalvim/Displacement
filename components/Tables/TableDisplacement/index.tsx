@@ -282,13 +282,11 @@ export default function CollapsibleTable() {
               <TableCell>
                 <strong>Categoria</strong>
               </TableCell>
-
               {!isMobile && (
                 <TableCell>
                   <strong>Nº Habilitação</strong>
                 </TableCell>
               )}
-
               <TableCell>
                 <strong>Ações</strong>
               </TableCell>

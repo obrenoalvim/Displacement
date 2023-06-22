@@ -1,3 +1,4 @@
+'use client';
 import { useState } from "react";
 import Link from "next/link";
 import {
@@ -13,8 +14,12 @@ import {
   useTheme,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from "@mui/icons-material/Home";
+import PersonIcon from "@mui/icons-material/Person";
+import DriveEtaIcon from "@mui/icons-material/DriveEta";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 
-import {Container} from './styles';
+import { Container, StyledLink, RightLinks } from './styles';
 
 export default function Header() {
   const theme = useTheme();
@@ -40,30 +45,32 @@ export default function Header() {
     }
 
     return (
-      <>
-        <Container>
-          <Link href="/cliente">
-            <Typography variant="button" color="inherit" className="link">
-              Cliente
-            </Typography>
-          </Link>
-          <Link href="/condutor">
-            <Typography variant="button" color="inherit" className="link">
-              Condutor
-            </Typography>
-          </Link>
-          <Link href="/veiculo">
-            <Typography variant="button" color="inherit" className="link">
-              Veículo
-            </Typography>
-          </Link>
-          <Link href="/deslocamento">
-            <Typography variant="button" color="inherit" className="link">
-              Deslocamento
-            </Typography>
-          </Link>
-        </Container>
-      </>
+      <RightLinks>
+        <Link href="/cliente">
+          <StyledLink variant="button" color="inherit">
+            <PersonIcon fontSize="small" />
+            Cliente
+          </StyledLink>
+        </Link>
+        <Link href="/condutor">
+          <StyledLink variant="button" color="inherit">
+            <PersonIcon fontSize="small" />
+            Condutor
+          </StyledLink>
+        </Link>
+        <Link href="/veiculo">
+          <StyledLink variant="button" color="inherit">
+            <DriveEtaIcon fontSize="small" />
+            Veículo
+          </StyledLink>
+        </Link>
+        <Link href="/deslocamento">
+          <StyledLink variant="button" color="inherit">
+            <LocationOnIcon fontSize="small" />
+            Deslocamento
+          </StyledLink>
+        </Link>
+      </RightLinks>
     );
   };
 
@@ -71,9 +78,14 @@ export default function Header() {
     <Container>
       <AppBar position="static" className="appBar">
         <Toolbar>
-          <Typography variant="h6" className="logo">
-            APPNATY
-          </Typography>
+          <Link href="/">
+            <Typography variant="h6" className="logo">
+              <StyledLink variant="h6" color="inherit">
+                APPNATY
+              </StyledLink>
+            </Typography>
+          </Link>
+          <div style={{ flex: 1 }} /> {/* Espaço flexível */}
           {renderLinks()}
           <Drawer anchor="right" open={isMenuOpen} onClose={toggleMenu}>
             <List>
@@ -82,7 +94,7 @@ export default function Header() {
                   <ListItemText primary="Cliente" />
                 </ListItem>
               </Link>
-              <Link href="/Condutor">
+              <Link href="/condutor">
                 <ListItem button component="a" onClick={toggleMenu}>
                   <ListItemText primary="Condutor" />
                 </ListItem>
@@ -92,7 +104,7 @@ export default function Header() {
                   <ListItemText primary="Veículo" />
                 </ListItem>
               </Link>
-              <Link href="/Deslocamento">
+              <Link href="/deslocamento">
                 <ListItem button component="a" onClick={toggleMenu}>
                   <ListItemText primary="Deslocamento" />
                 </ListItem>
