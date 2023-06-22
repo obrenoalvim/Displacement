@@ -1,6 +1,6 @@
 export const formFieldsDisplacement = [
   { id: "kmInicial", label: "Km Inicial", type: "number" },
-  { id: "inicioDeslocamento", label: "Início do Deslocamento" },
+  { id: "inicioDeslocamento", label: "Início do Deslocamento", type: "date" },
   { id: "checkList", label: "CheckList" },
   { id: "motivo", label: "Motivo" },
   { id: "observacao", label: "Observação" },

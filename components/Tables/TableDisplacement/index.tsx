@@ -20,24 +20,28 @@ import {
   DialogActions,
   Button,
   Snackbar,
+  MenuItem,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
-import getAllConductors from "../../Api/conductor";
-import deleteConductor from "../../Api/conductor/delete";
-import newConductor from "../../Api/conductor/add";
-import updateConductor from "../../Api/conductor/update";
-import { Conductor } from "@/types";
+import getAllDisplacements from "../../Api/displacement";
+import deleteDisplacement from "../../Api/displacement/delete";
+import newDisplacement from "../../Api/displacement/add";
+import updateDisplacement from "../../Api/displacement/update";
 import DialogLoading from "../../Utils/Dialog/Loading/page";
 import DialogError from "../../Utils/Dialog/Error/page";
 import { useMediaQuery } from "react-responsive";
 import { Container } from "../TableStyle/styles";
 import Row from "./Row";
-import { formFieldsConductor } from "../../Form/FormFields/conductor";
+import { formFieldsDisplacement } from "../../Form/FormFields/displacement";
+import getAllVehicles from "@/components/Api/vehicle";
+import getAllConductors from "@/components/Api/conductor";
+import getAllClients from "@/components/Api/client";
+import { Client, Vehicle, Conductor, Displacement } from '@/types';
 
 export default function CollapsibleTable() {
-  const [conductors, setConductors] = useState<Conductor[]>([]);
+  const [displacements, setDisplacements] = useState<Displacement[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(0);
@@ -45,28 +49,61 @@ export default function CollapsibleTable() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [deleteConductorId, setDeleteConductorId] = useState<number>(0);
-  const [deleteConductorName, setDeleteConductorName] = useState<string>("");
+  const [deleteDisplacementId, setDeleteDisplacementId] = useState<number>(0);
+  const [deleteDisplacementName, setDeleteDisplacementName] = useState<string>("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogConductor, setDialogConductor] = useState<any | null>(null);
+  const [dialogDisplacement, setDialogDisplacement] = useState<any | null>(null);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [conductors, setConductors] = useState<Conductor[]>([]);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   useEffect(() => {
     fetchData();
+    fetchClients();
+    fetchVehicles();
+    fetchConductors();
   }, []);
 
   const fetchData = async () => {
     setIsLoading(true);
     setIsError(false);
     try {
-      const data = await getAllConductors();
-      setConductors(data);
+      const data = await getAllDisplacements();
+      setDisplacements(data);
     } catch (error) {
       setIsError(true);
     }
     setIsLoading(false);
+  };
+
+  const fetchClients = async () => {
+    try {
+      const data = await getAllClients();
+      setClients(data);
+    } catch (error) {
+      console.error("Error fetching clients:", error);
+    }
+  };
+
+  const fetchVehicles = async () => {
+    try {
+      const data = await getAllVehicles();
+      setVehicles(data);
+    } catch (error) {
+      console.error("Error fetching vehicles:", error);
+    }
+  };
+
+  const fetchConductors = async () => {
+    try {
+      const data = await getAllConductors();
+      setConductors(data);
+    } catch (error) {
+      console.error("Error fetching conductors:", error);
+    }
   };
 
   const handleUpdate = async () => {
@@ -80,34 +117,30 @@ export default function CollapsibleTable() {
   };
 
   const handleAddNew = () => {
-    setDialogConductor(null);
+    setDialogDisplacement(null);
     setDialogOpen(true);
   };
 
-  const handleEdit = (conductor: Conductor) => {
-    setDialogConductor(conductor);
+  const handleEdit = (displacement: Displacement) => {
+    setDialogDisplacement(displacement);
     setDialogOpen(true);
   };
 
-  const handleSave = async (conductor: Conductor) => {
+  const handleSave = async (displacement: Displacement) => {
     setDialogOpen(false);
 
     try {
-      if (conductor.id) {
-        await updateConductor(conductor);
-        setSnackbarMessage(
-          `O condutor ${conductor.nome} foi atualizado com sucesso!`
-        );
+      if (displacement.id) {
+        await updateDisplacement(displacement);
+        setSnackbarMessage(`O deslocamento foi atualizado com sucesso!`);
       } else {
-        await newConductor(conductor);
-        setSnackbarMessage(
-          `O condutor ${conductor.nome} foi cadastrado com sucesso!`
-        );
+        await newDisplacement(displacement);
+        setSnackbarMessage(`O deslocamento foi cadastrado com sucesso!`);
       }
       setSnackbarOpen(true);
       fetchData();
     } catch (error) {
-      setSnackbarMessage(`Erro ao salvar condutor.`);
+      setSnackbarMessage(`Erro ao salvar deslocamento.`);
       setSnackbarOpen(true);
     }
   };
@@ -123,9 +156,9 @@ export default function CollapsibleTable() {
     setPage(0);
   };
 
-  const filterConductors = () => {
-    const filtered = conductors.filter((conductor) =>
-      Object.values(conductor).some((value) =>
+  const filterDisplacements = () => {
+    const filtered = displacements.filter((displacement) =>
+      Object.values(displacement).some((value) =>
         value.toString().toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
@@ -137,8 +170,8 @@ export default function CollapsibleTable() {
   };
 
   const handleDelete = async (id: number, nome: string) => {
-    setDeleteConductorId(id);
-    setDeleteConductorName(nome);
+    setDeleteDisplacementId(id);
+    setDeleteDisplacementName(nome);
     setDeleteDialogOpen(true);
   };
 
@@ -146,20 +179,20 @@ export default function CollapsibleTable() {
     setDeleteDialogOpen(false);
 
     try {
-      const response = await deleteConductor(deleteConductorId);
+      const response = await deleteDisplacement(deleteDisplacementId);
       if (response) {
         setSnackbarMessage(
-          `O condutor ${deleteConductorName} foi excluído com sucesso!`
+          `O deslocamento ${deleteDisplacementName} foi excluído com sucesso!`
         );
         setSnackbarOpen(true);
         fetchData();
       } else {
-        setSnackbarMessage(`Erro ao deletar condutor ${deleteConductorName}.`);
+        setSnackbarMessage(`Erro ao deletar deslocamento ${deleteDisplacementName}.`);
         setSnackbarOpen(true);
         fetchData();
       }
     } catch {
-      setSnackbarMessage(`Erro ao deletar condutor ${deleteConductorName}.`);
+      setSnackbarMessage(`Erro ao deletar deslocamento ${deleteDisplacementName}.`);
       setSnackbarOpen(true);
       fetchData();
     }
@@ -180,10 +213,10 @@ export default function CollapsibleTable() {
     return <DialogError error={isError} />;
   }
 
-  const filteredConductors = filterConductors();
+  const filteredDisplacements = filterDisplacements();
   const emptyRows =
     rowsPerPage -
-    Math.min(rowsPerPage, filteredConductors.length - page * rowsPerPage);
+    Math.min(rowsPerPage, filteredDisplacements.length - page * rowsPerPage);
 
   return (
     <Container>
@@ -200,7 +233,7 @@ export default function CollapsibleTable() {
           }}
         >
           <Grid item>
-            <Typography variant="h6">Condutores</Typography>
+            <Typography variant="h6">Deslocamentos</Typography>
           </Grid>
           <Grid item>
             <Grid container alignItems="center">
@@ -211,7 +244,7 @@ export default function CollapsibleTable() {
                 onClick={handleAddNew}
               >
                 <AddIcon />
-                <Typography>Novo Condutor</Typography>
+                <Typography>Novo Deslocamento</Typography>
               </IconButton>
               <TextField
                 label="Pesquisar"
@@ -262,12 +295,12 @@ export default function CollapsibleTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredConductors
+            {filteredDisplacements
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((conductor) => (
+              .map((displacement) => (
                 <Row
-                  key={conductor.id}
-                  row={conductor}
+                  key={displacement.id}
+                  row={displacement}
                   onDelete={handleDelete}
                   onEdit={handleEdit}
                 />
@@ -282,7 +315,7 @@ export default function CollapsibleTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={filteredConductors.length}
+          count={filteredDisplacements.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -292,7 +325,7 @@ export default function CollapsibleTable() {
           <DialogTitle>Confirmação de exclusão</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Tem certeza que deseja excluir o condutor {deleteConductorName}?
+              Tem certeza que deseja excluir o deslocamento {deleteDisplacementName}?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -306,46 +339,122 @@ export default function CollapsibleTable() {
         </Dialog>
         <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
           <DialogTitle>
-            {dialogConductor?.id ? "Editar condutor" : "Novo condutor"}
+            {dialogDisplacement?.id ? "Editar deslocamento" : "Novo deslocamento"}
           </DialogTitle>
           <DialogContent>
             <DialogContentText>Preencha os campos abaixo:</DialogContentText>
-            {formFieldsConductor.map((field) => {
-              const isEditingExistingConductor =
-                dialogConductor && dialogConductor.id;
-              const isNumeroDocumentoField = field.id === "numeroDocumento";
-              const shouldRenderField =
-                !isEditingExistingConductor || !isNumeroDocumentoField;
-              if (shouldRenderField) {
+            {formFieldsDisplacement.map((field) => {
+              const isEditingExistingDisplacement =
+                dialogDisplacement && dialogDisplacement.id;
+              const value = isEditingExistingDisplacement
+                ? dialogDisplacement[field.label]
+                : "";
+
+              if (field.label === "Cliente") {
                 return (
                   <TextField
-                    key={field.id}
-                    id={field.id}
+                    key={field.label}
+                    select
                     label={field.label}
-                    type={field.type ? field.type : "text"}
-                    fullWidth
-                    margin="normal"
-                    value={dialogConductor?.[field.id] ?? ""}
+                    value={value}
                     onChange={(e) =>
-                      setDialogConductor((prevState: any) => ({
+                      setDialogDisplacement((prevState: any) => ({
                         ...prevState,
-                        [field.id]: e.target.value,
+                        [field.label]: e.target.value,
                       }))
                     }
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                  >
+                    {clients.map((client) => (
+                      <MenuItem key={client.id} value={client.id}>
+                        {client.nome}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                );
+              } else if (field.label === "Veículo") {
+                return (
+                  <TextField
+                    key={field.label}
+                    select
+                    label={field.label}
+                    value={value}
+                    onChange={(e) =>
+                      setDialogDisplacement((prevState: any) => ({
+                        ...prevState,
+                        [field.label]: e.target.value,
+                      }))
+                    }
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                  >
+                    {vehicles.map((vehicle) => (
+                      <MenuItem key={vehicle.id} value={vehicle.id}>
+                        {vehicle.placa}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                );
+              } else if (field.label === "Condutor") {
+                return (
+                  <TextField
+                    key={field.label}
+                    select
+                    label={field.label}
+                    value={value}
+                    onChange={(e) =>
+                      setDialogDisplacement((prevState: any) => ({
+                        ...prevState,
+                        [field.label]: e.target.value,
+                      }))
+                    }
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                  >
+                    {conductors.map((conductor) => (
+                      <MenuItem key={conductor.id} value={conductor.id}>
+                        {conductor.nome}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                );
+              } else {
+                return (
+                  <TextField
+                    key={field.label}
+                    label={field.label}
+                    value={value}
+                    onChange={(e) =>
+                      setDialogDisplacement((prevState: any) => ({
+                        ...prevState,
+                        [field.label]: e.target.value,
+                      }))
+                    }
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
                   />
                 );
               }
-              return null;
             })}
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setDialogOpen(false)}>Cancelar</Button>
-            <Button onClick={() => handleSave(dialogConductor)}>Salvar</Button>
+            <Button
+              onClick={() => handleSave(dialogDisplacement)}
+              color="primary"
+            >
+              Salvar
+            </Button>
           </DialogActions>
         </Dialog>
         <Snackbar
           open={snackbarOpen}
-          autoHideDuration={5000}
+          autoHideDuration={4000}
           onClose={handleCloseSnackbar}
           message={snackbarMessage}
         />

@@ -12,13 +12,16 @@ export default async function newConductor(displacement: Displacement) {
     idCliente: displacement.idCliente,
   };
 
-  const response = await fetch(`${environment.BASE_URL}Deslocamento/IniciarDeslocamento`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
+  const response = await fetch(
+    `${environment.BASE_URL}Deslocamento/IniciarDeslocamento`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    }
+  );
 
   const responseJson = await response.json();
 
