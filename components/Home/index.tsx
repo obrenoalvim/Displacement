@@ -1,98 +1,80 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { Card, CardContent, Typography } from "@mui/material";
-import { CardGrid, StyledCard, StyledBadge } from "./styles";
-import Link from "next/link";
-import getAllClients from "../Api/client";
-import getAllVehicles from "../Api/vehicle";
-import getAllConductors from "../Api/conductor";
-import getAllDisplacements from "../Api/displacement";
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Button from '@mui/material/Button';
+import CameraIcon from '@mui/icons-material/PhotoCamera';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import CssBaseline from '@mui/material/CssBaseline';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Link from '@mui/material/Link';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-export default function Homepage() {
-  const [clientCount, setClientCount] = useState(0);
-  const [vehicleCount, setVehicleCount] = useState(0);
-  const [conductorCount, setConductorCount] = useState(0);
-  const [displacementCount, setDisplacementCount] = useState(0);
+const cardsView = [
+  {
+    id: 1,
+    name: 'Cliente',
+    description: 'a',
+    url: '/cliente'
+  },
+  {
+    id: 2,
+    name: 'Condutor',
+    description: 'a',
+    url: '/condutor'
+  },
+  {
+    id: 3,
+    name: 'Veículo',
+    description: 'a',
+    url: '/veiculo'
+  },
+  {
+    id: 4,
+    name: 'Deslocamento',
+    description: 'a',
+    url: '/deslocamento'
+  }
+]
 
-  useEffect(() => {
-    const fetchClientCount = async () => {
-      try {
-        const clients = await getAllClients();
-        setClientCount(clients.length);
-      } catch (error) {
-        console.error("Erro ao obter a quantidade de clientes:", error);
-      }
-    };
+// TODO remove, this demo shouldn't need to reset the theme.
+const defaultTheme = createTheme();
 
-    const fetchVehicleCount = async () => {
-      try {
-        const vehicles = await getAllVehicles();
-        setVehicleCount(vehicles.length);
-      } catch (error) {
-        console.error("Erro ao obter a quantidade de veículos:", error);
-      }
-    };
-
-    const fetchConductorCount = async () => {
-      try {
-        const conductors = await getAllConductors();
-        setConductorCount(conductors.length);
-      } catch (error) {
-        console.error("Erro ao obter a quantidade de condutores:", error);
-      }
-    };
-
-    const fetchDisplacementCount = async () => {
-      try {
-        const displacements = await getAllDisplacements();
-        setDisplacementCount(displacements.length);
-      } catch (error) {
-        console.error("Erro ao obter a quantidade de deslocamentos:", error);
-      }
-    };
-
-    fetchClientCount();
-    fetchVehicleCount();
-    fetchConductorCount();
-    fetchDisplacementCount();
-
-    const interval = setInterval(() => {
-      fetchClientCount();
-      fetchVehicleCount();
-      fetchConductorCount();
-      fetchDisplacementCount();
-    }, 60000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const cards = [
-    { title: "Clientes", url: "/cliente", badgeContent: clientCount },
-    { title: "Veículos", url: "/veiculo", badgeContent: vehicleCount },
-    { title: "Condutores", url: "/condutor", badgeContent: conductorCount },
-    {
-      title: "Deslocamento",
-      url: "/deslocamento",
-      badgeContent: displacementCount,
-    },
-  ];
-
+export default function Album() {
   return (
-    <CardGrid>
-      {cards.map((card, index) => (
-        <Link href={card.url} key={index}>
-          <StyledCard>
-            {card.badgeContent > 0 && (
-              <StyledBadge badgeContent={card.badgeContent} color="secondary" />
-            )}
-            <CardContent>
-              <Typography variant="h5" component="div" align="center">
-                {card.title}
-              </Typography>
-            </CardContent>
-          </StyledCard>
-        </Link>
-      ))}
-    </CardGrid>
+    <ThemeProvider theme={defaultTheme}>
+      <CssBaseline />
+      <main>
+        <Container sx={{ py: 4 }} maxWidth="md">
+          <Grid container spacing={3}>
+            {cardsView.map((card) => (
+              <Grid item key={card.id} xs={12} sm={6} md={4}>
+                <Card
+                  sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+                >
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      {card.name}
+                    </Typography>
+                    <Typography>
+                      {card.description}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Link href={card.url}><Button size="small">View</Button></Link>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </main>
+    </ThemeProvider>
   );
 }

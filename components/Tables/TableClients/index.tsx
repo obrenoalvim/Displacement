@@ -35,9 +35,8 @@ import { useMediaQuery } from "react-responsive";
 import { Container } from "../TableStyle/styles";
 import Row from "./Row";
 import { formFieldsClient } from "../../Form/FormFields/client";
-export default function CollapsibleTable() {
 
-  
+export default function CollapsibleTable() {
   const [clients, setClients] = useState<Client[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -76,7 +75,7 @@ export default function CollapsibleTable() {
     try {
       await fetchData();
     } catch (error) {
-      console.error("Error updating data:", error);
+      console.error("Error updating data:", error);z
     }
     setIsUpdating(false);
   };
