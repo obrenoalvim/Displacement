@@ -28,6 +28,12 @@ export const Container = styled.main`
     font-weight: bold;
   }
 
+  .table .MuiTableCell-head svg {
+    width: 18px;
+    padding-top: 5px;
+    border: 1px soldi red
+  }
+
   .table .MuiTableRow-root.Mui-selected,
   .table .MuiTableRow-root.Mui-selected:hover {
     background-color: #e8eaf6;

@@ -15,7 +15,7 @@ export const Container = styled.header`
 export const StyledLink = styled(Typography)`
   display: flex;
   align-items: center;
-  margin-right: 10px;
+  margin-right: 20px;
 
   svg {
     margin-right: 5px;

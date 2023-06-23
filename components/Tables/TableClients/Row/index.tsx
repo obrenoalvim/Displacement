@@ -16,6 +16,9 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import FolderCopyIcon from '@mui/icons-material/FolderCopy';
+import HouseIcon from '@mui/icons-material/House';
+import HolidayVillageIcon from '@mui/icons-material/HolidayVillage';
 
 interface Props {
   row: Client;
@@ -75,9 +78,17 @@ export default function Row(props: Props) {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Nº Doc.</TableCell>
-                    <TableCell>Logradouro</TableCell>
-                    <TableCell>Bairro</TableCell>
+                  
+                    <TableCell> 
+                      <FolderCopyIcon fontSize="small"/>
+                      Nº Doc.
+                    </TableCell>
+                    <TableCell>
+                      <HouseIcon fontSize="small"/>
+                    Logradouro</TableCell>
+                    <TableCell>
+                      <HolidayVillageIcon fontSize="small"/>
+                    Bairro</TableCell>
                     {isMobile && <TableCell>UF</TableCell>}
                   </TableRow>
                 </TableHead>

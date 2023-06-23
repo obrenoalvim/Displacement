@@ -14,7 +14,6 @@ import {
   useTheme,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import HomeIcon from "@mui/icons-material/Home";
 import PersonIcon from "@mui/icons-material/Person";
 import DriveEtaIcon from "@mui/icons-material/DriveEta";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -91,21 +90,25 @@ export default function Header() {
             <List>
               <Link href="/cliente">
                 <ListItem button component="a" onClick={toggleMenu}>
+                <PersonIcon fontSize="small" />
                   <ListItemText primary="Cliente" />
                 </ListItem>
               </Link>
               <Link href="/condutor">
                 <ListItem button component="a" onClick={toggleMenu}>
+                <PersonIcon fontSize="small" />
                   <ListItemText primary="Condutor" />
                 </ListItem>
               </Link>
               <Link href="/veiculo">
                 <ListItem button component="a" onClick={toggleMenu}>
+                <DriveEtaIcon fontSize="small" />
                   <ListItemText primary="Veículo" />
                 </ListItem>
               </Link>
               <Link href="/deslocamento">
                 <ListItem button component="a" onClick={toggleMenu}>
+                <LocationOnIcon fontSize="small" />
                   <ListItemText primary="Deslocamento" />
                 </ListItem>
               </Link>
