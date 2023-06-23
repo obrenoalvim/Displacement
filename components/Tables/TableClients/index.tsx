@@ -78,7 +78,7 @@ export default function CollapsibleTable() {
     try {
       await fetchData();
     } catch (error) {
-      console.error("Error updating data:", error);z
+      console.error("Error updating data:", error);
     }
     setIsUpdating(false);
   };
