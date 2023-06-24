@@ -19,7 +19,7 @@ export default async function updateDisplacement(displacement: Displacement) {
 
   try {
     const response = await fetch(
-      `${environment.BASE_URL}Deslocamento/${displacement.id}`,
+      `${environment.BASE_URL}Deslocamento/${displacement.id}/EncerrarDelocamento`,
       {
         method: "PUT",
         headers: myHeaders,

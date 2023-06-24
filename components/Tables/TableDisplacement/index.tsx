@@ -29,16 +29,17 @@ import getAllDisplacements from "../../Api/displacement";
 import deleteDisplacement from "../../Api/displacement/delete";
 import newDisplacement from "../../Api/displacement/add";
 import updateDisplacement from "../../Api/displacement/update";
+import { Displacement } from "@/types";
 import DialogLoading from "../../Utils/Dialog/Loading/page";
 import DialogError from "../../Utils/Dialog/Error/page";
 import { useMediaQuery } from "react-responsive";
 import { Container } from "../TableStyle/styles";
 import Row from "./Row";
-import { formFieldsDisplacement } from "../../Form/FormFields/displacement";
 import getAllVehicles from "@/components/Api/vehicle";
 import getAllConductors from "@/components/Api/conductor";
 import getAllClients from "@/components/Api/client";
 import { Client, Vehicle, Conductor, Displacement } from '@/types';
+import { formFieldsDisplacement } from "../../Form/FormFields/displacement";
 
 export default function CollapsibleTable() {
   const [displacements, setDisplacements] = useState<Displacement[]>([]);
@@ -58,6 +59,8 @@ export default function CollapsibleTable() {
   const [clients, setClients] = useState<Client[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [conductors, setConductors] = useState<Conductor[]>([]);
+  const [isEditing, setIsEditing] = useState(false);
+
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   useEffect(() => {
@@ -65,6 +68,9 @@ export default function CollapsibleTable() {
     fetchClients();
     fetchVehicles();
     fetchConductors();
+
+
+
   }, []);
 
   const fetchData = async () => {
@@ -119,11 +125,13 @@ export default function CollapsibleTable() {
   const handleAddNew = () => {
     setDialogDisplacement(null);
     setDialogOpen(true);
+    setIsEditing(false); 
   };
-
+  
   const handleEdit = (displacement: Displacement) => {
     setDialogDisplacement(displacement);
     setDialogOpen(true);
+    setIsEditing(true);
   };
 
   const handleSave = async (displacement: Displacement) => {
@@ -132,13 +140,20 @@ export default function CollapsibleTable() {
     try {
       if (displacement.id) {
         await updateDisplacement(displacement);
-        setSnackbarMessage(`O deslocamento foi atualizado com sucesso!`);
+        setSnackbarMessage(
+          `O deslocamento foi atualizado com sucesso!`
+        );
       } else {
         await newDisplacement(displacement);
-        setSnackbarMessage(`O deslocamento foi cadastrado com sucesso!`);
+        setSnackbarMessage(
+          `O deslocamento foi cadastrado com sucesso!`
+        );
       }
       setSnackbarOpen(true);
       fetchData();
+      fetchClients();
+      fetchVehicles();
+      fetchConductors();
     } catch (error) {
       setSnackbarMessage(`Erro ao salvar deslocamento.`);
       setSnackbarOpen(true);
@@ -182,19 +197,28 @@ export default function CollapsibleTable() {
       const response = await deleteDisplacement(deleteDisplacementId);
       if (response) {
         setSnackbarMessage(
-          `O deslocamento ${deleteDisplacementName} foi excluído com sucesso!`
+          `O deslocamento foi excluído com sucesso!`
         );
         setSnackbarOpen(true);
         fetchData();
+        fetchClients();
+        fetchVehicles();
+        fetchConductors();
       } else {
-        setSnackbarMessage(`Erro ao deletar deslocamento ${deleteDisplacementName}.`);
+        setSnackbarMessage(`Erro ao deletar deslocamento.`);
         setSnackbarOpen(true);
         fetchData();
+        fetchClients();
+        fetchVehicles();
+        fetchConductors();
       }
     } catch {
-      setSnackbarMessage(`Erro ao deletar deslocamento ${deleteDisplacementName}.`);
+      setSnackbarMessage(`Erro ao deletar deslocamento.`);
       setSnackbarOpen(true);
       fetchData();
+      fetchClients();
+      fetchVehicles();
+      fetchConductors();
     }
   };
 
@@ -282,11 +306,13 @@ export default function CollapsibleTable() {
               <TableCell>
                 <strong>Categoria</strong>
               </TableCell>
+
               {!isMobile && (
                 <TableCell>
                   <strong>Nº Habilitação</strong>
                 </TableCell>
               )}
+
               <TableCell>
                 <strong>Ações</strong>
               </TableCell>
@@ -323,7 +349,7 @@ export default function CollapsibleTable() {
           <DialogTitle>Confirmação de exclusão</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Tem certeza que deseja excluir o deslocamento {deleteDisplacementName}?
+              Tem certeza que deseja excluir o deslocamento?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -340,73 +366,87 @@ export default function CollapsibleTable() {
             {dialogDisplacement?.id ? "Editar deslocamento" : "Novo deslocamento"}
           </DialogTitle>
           <DialogContent>
-            <DialogContentText>Preencha os campos abaixo:</DialogContentText>
-            {formFieldsDisplacement.map((field) => {
-              const isEditingExistingDisplacement =
-                dialogDisplacement && dialogDisplacement.id;
-              const value = isEditingExistingDisplacement
-                ? dialogDisplacement[field.label]
-                : "";
 
-              if (field.label === "Cliente") {
-                return (
-                  <TextField
-                    key={field.label}
+
+
+  <DialogContentText>Preencha os campos abaixo:</DialogContentText>
+  {formFieldsDisplacement.map((field) => {
+    const isEditingExistingDisplacement =
+      dialogDisplacement && dialogDisplacement.id;
+    const isNumeroDocumentoField = field.id === "numeroDocumento";
+    const shouldRenderField =
+    (!isEditingExistingDisplacement || !isNumeroDocumentoField) &&
+    (!isEditing || (isEditing && field.id !== "idVeiculo" && field.id !== "idCliente"));
+
+      
+    if (shouldRenderField) {
+      if (isEditing) {
+        // Renderizar apenas os campos necessários para edição
+        if (
+          field.id === "kmFinal" ||
+          field.id === "fimDeslocamento" ||
+          field.id === "observacao"
+        ) {
+          return (
+            <TextField
+              key={field.id}
+              id={field.id}
+              label={field.label}
+              type={field.type ? field.type : "text"}
+              fullWidth
+              margin="normal"
+              value={dialogDisplacement?.[field.id] ?? ""}
+              onChange={(e) =>
+                setDialogDisplacement((prevState: any) => ({
+                  ...prevState,
+                  [field.id]: e.target.value,
+                }))
+              }
+            />
+          );
+        }
+      } else {
+        // Renderizar apenas os campos necessários para novo deslocamento
+        if (
+          field.id === "kmInicial" ||
+          field.id === "inicioDeslocamento" ||
+          field.id === "checkList" ||
+          field.id === "motivo" ||
+          field.id === "observacao"
+        ) {
+          return (
+            <TextField
+              key={field.id}
+              id={field.id}
+              label={field.label}
+              type={field.type ? field.type : "text"}
+              fullWidth
+              margin="normal"
+              value={dialogDisplacement?.[field.id] ?? ""}
+              onChange={(e) =>
+                setDialogDisplacement((prevState: any) => ({
+                  ...prevState,
+                  [field.id]: e.target.value,
+                }))
+              }
+            />
+          );
+        }
+      }
+    }
+    return null;
+  })}
+
+
+
+                            <TextField
+                    key="idCondutor"
                     select
-                    label={field.label}
-                    value={value}
+                    label="Condutor"
                     onChange={(e) =>
                       setDialogDisplacement((prevState: any) => ({
                         ...prevState,
-                        [field.label]: e.target.value,
-                      }))
-                    }
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                  >
-                    {clients.map((client) => (
-                      <MenuItem key={client.id} value={client.id}>
-                        {client.nome}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                );
-              } else if (field.label === "Veículo") {
-                return (
-                  <TextField
-                    key={field.label}
-                    select
-                    label={field.label}
-                    value={value}
-                    onChange={(e) =>
-                      setDialogDisplacement((prevState: any) => ({
-                        ...prevState,
-                        [field.label]: e.target.value,
-                      }))
-                    }
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                  >
-                    {vehicles.map((vehicle) => (
-                      <MenuItem key={vehicle.id} value={vehicle.id}>
-                        {vehicle.placa}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                );
-              } else if (field.label === "Condutor") {
-                return (
-                  <TextField
-                    key={field.label}
-                    select
-                    label={field.label}
-                    value={value}
-                    onChange={(e) =>
-                      setDialogDisplacement((prevState: any) => ({
-                        ...prevState,
-                        [field.label]: e.target.value,
+                        [formFieldsDisplacement[7].id]: e.target.value,
                       }))
                     }
                     variant="outlined"
@@ -419,40 +459,66 @@ export default function CollapsibleTable() {
                       </MenuItem>
                     ))}
                   </TextField>
-                );
-              } else {
-                return (
+
+
                   <TextField
-                    key={field.label}
-                    label={field.label}
-                    value={value}
+                    key="idVeiculo"
+                    select
+                    label="Veículo"
                     onChange={(e) =>
                       setDialogDisplacement((prevState: any) => ({
                         ...prevState,
-                        [field.label]: e.target.value,
+                        [formFieldsDisplacement[8].id]: e.target.value,
                       }))
                     }
                     variant="outlined"
                     fullWidth
                     margin="normal"
-                  />
-                );
-              }
-            })}
+                  >
+                    {vehicles.map((vehicle) => (
+                      <MenuItem key={vehicle.id} value={vehicle.id}>
+                        {vehicle.placa}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+
+
+                  <TextField
+                    key="idCliente"
+                    select
+                    label="Cliente"
+                    onChange={(e) =>
+                      setDialogDisplacement((prevState: any) => ({
+                        ...prevState,
+                        [formFieldsDisplacement[9].id]: e.target.value,
+                      }))
+                    }
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                  >
+                    {clients.map((client) => (
+                      <MenuItem key={client.id} value={client.id}>
+                        {client.nome}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+
+
+
+
+                    
+                    
+
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setDialogOpen(false)}>Cancelar</Button>
-            <Button
-              onClick={() => handleSave(dialogDisplacement)}
-              color="primary"
-            >
-              Salvar
-            </Button>
+            <Button onClick={() => handleSave(dialogDisplacement)}>Salvar</Button>
           </DialogActions>
         </Dialog>
         <Snackbar
           open={snackbarOpen}
-          autoHideDuration={4000}
+          autoHideDuration={5000}
           onClose={handleCloseSnackbar}
           message={snackbarMessage}
         />
