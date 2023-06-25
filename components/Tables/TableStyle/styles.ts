@@ -45,7 +45,7 @@ export const Container = styled.main`
     justify-content: space-between;
     /* margin-bottom: 15px; */
     margin-left: 15px;
-    flex-wrap: wrap
+    flex-wrap: wrap;
   }
 
   .table .title-bar h6 {
@@ -68,7 +68,6 @@ export const Container = styled.main`
     }
 
     .table .title-bar h6 {
-      
     }
 
     .table .MuiTableContainer-root {

@@ -57,12 +57,12 @@ export default function Row(props: Props) {
         {!isMobile && <TableCell>{row.numeroHabilitacao}</TableCell>}
 
         <TableCell>
-          <IconButton aria-label="edit" onClick={handleEdit}>
-            <EditIcon />
+          <IconButton title="Editar Condutor" aria-label="edit" onClick={handleEdit}>
+            <EditIcon style={{ color: "grey" }} />
           </IconButton>
 
-          <IconButton aria-label="delete" onClick={handleDelete}>
-            <DeleteIcon />
+          <IconButton title="Deletar Condutor" aria-label="delete" onClick={handleDelete}>
+            <DeleteIcon style={{ color: "red" }} />
           </IconButton>
         </TableCell>
       </TableRow>

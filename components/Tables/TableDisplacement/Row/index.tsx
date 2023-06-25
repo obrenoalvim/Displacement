@@ -54,25 +54,29 @@ export default function Row(props: Props) {
         </TableCell>
 
         <TableCell>{row.motivo}</TableCell>
-        <TableCell>{format( new Date(row.inicioDeslocamento), "dd/mm/yyyy")}</TableCell>
-        <TableCell>{row.fimDeslocamento == null ? 'Não encerrado' : format( new Date(row.fimDeslocamento), "dd/mm/yyyy") }</TableCell>
+        <TableCell>
+          {format(new Date(row.inicioDeslocamento), "dd/mm/yyyy")}
+        </TableCell>
+        <TableCell>
+          {row.fimDeslocamento == null
+            ? "Não encerrado"
+            : format(new Date(row.fimDeslocamento), "dd/mm/yyyy")}
+        </TableCell>
 
         {!isMobile && <TableCell>{row.observacao}</TableCell>}
 
         <TableCell>
           {row.fimDeslocamento != null ? null : (
-
             <IconButton
-            aria-label="finish"
-            onClick={handleEdit}
-            title="Encerrar Deslocamento"
+              aria-label="finish"
+              onClick={handleEdit}
+              title="Encerrar Deslocamento"
             >
-            <CheckCircleIcon />
-          </IconButton>
-
-            )}
+              <CheckCircleIcon style={{ color: "green" }} />
+            </IconButton>
+          )}
           <IconButton aria-label="delete" onClick={handleDelete}>
-            <DeleteIcon />
+            <DeleteIcon style={{ color: "red" }} />
           </IconButton>
         </TableCell>
       </TableRow>
@@ -95,7 +99,9 @@ export default function Row(props: Props) {
                 <TableBody>
                   <TableRow>
                     <TableCell>{row.kmInicial}</TableCell>
-                    <TableCell>{row.kmFinal != null ? row.kmFinal : "Não encerrado"}</TableCell>
+                    <TableCell>
+                      {row.kmFinal != null ? row.kmFinal : "Não encerrado"}
+                    </TableCell>
                     <TableCell>{row.checkList}</TableCell>
                     {isMobile && <TableCell>{row.observacao}</TableCell>}
                   </TableRow>

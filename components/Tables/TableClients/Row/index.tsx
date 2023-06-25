@@ -59,12 +59,12 @@ export default function Row(props: Props) {
         {!isMobile && <TableCell>{row.uf}</TableCell>}
 
         <TableCell>
-          <IconButton aria-label="edit" onClick={handleEdit}>
-            <EditIcon />
+          <IconButton title="Editar Cliente" aria-label="edit" onClick={handleEdit}>
+            <EditIcon style={{ color: "grey" }} />
           </IconButton>
 
-          <IconButton aria-label="delete" onClick={handleDelete}>
-            <DeleteIcon />
+          <IconButton title="Deletar Cliente" aria-label="delete" onClick={handleDelete}>
+            <DeleteIcon style={{ color: "red" }} />
           </IconButton>
         </TableCell>
       </TableRow>
