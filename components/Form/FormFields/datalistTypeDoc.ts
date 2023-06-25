@@ -4,5 +4,5 @@ export const datalistTypeDoc = [
   { label: "CNH" },
   { label: "Passaporte" },
   { label: "Reservista" },
-  { label: "Carteira de Trabalho" }
+  { label: "Carteira de Trabalho" },
 ];

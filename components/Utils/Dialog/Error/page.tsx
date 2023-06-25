@@ -8,7 +8,9 @@ export default function DialogError(props: DialogErrorProps) {
   return (
     <Dialog open={props.error}>
       <Box display="flex" alignItems="center" justifyContent="center" p={4}>
-        <Typography variant="h6">Erro ao carregar dados. Tentando novamente em 5 segundos!</Typography>
+        <Typography variant="h6">
+          Erro ao carregar dados. Tentando novamente em 5 segundos!
+        </Typography>
       </Box>
     </Dialog>
   );

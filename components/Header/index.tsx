@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useState } from "react";
 import Link from "next/link";
 import {
@@ -18,7 +18,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import DriveEtaIcon from "@mui/icons-material/DriveEta";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 
-import { Container, StyledLink, RightLinks } from './styles';
+import { Container, StyledLink, RightLinks } from "./styles";
 
 export default function Header() {
   const theme = useTheme();
@@ -90,25 +90,25 @@ export default function Header() {
             <List>
               <Link href="/cliente">
                 <ListItem button component="a" onClick={toggleMenu}>
-                <PersonIcon fontSize="small" />
+                  <PersonIcon fontSize="small" />
                   <ListItemText primary="Cliente" />
                 </ListItem>
               </Link>
               <Link href="/condutor">
                 <ListItem button component="a" onClick={toggleMenu}>
-                <PersonIcon fontSize="small" />
+                  <PersonIcon fontSize="small" />
                   <ListItemText primary="Condutor" />
                 </ListItem>
               </Link>
               <Link href="/veiculo">
                 <ListItem button component="a" onClick={toggleMenu}>
-                <DriveEtaIcon fontSize="small" />
+                  <DriveEtaIcon fontSize="small" />
                   <ListItemText primary="Veículo" />
                 </ListItem>
               </Link>
               <Link href="/deslocamento">
                 <ListItem button component="a" onClick={toggleMenu}>
-                <LocationOnIcon fontSize="small" />
+                  <LocationOnIcon fontSize="small" />
                   <ListItemText primary="Deslocamento" />
                 </ListItem>
               </Link>

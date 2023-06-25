@@ -13,5 +13,5 @@ export default async function deleteVehicle(id: number) {
     body: body,
   });
 
-  return response.status == 400 ? false : true
+  return response.status == 400 ? false : true;
 }

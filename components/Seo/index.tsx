@@ -1,8 +1,8 @@
-import TwitterCard from './TwitterCard';
+import TwitterCard from "./TwitterCard";
 export default function Seo() {
   return (
     <>
-      <TwitterCard/>
+      <TwitterCard />
     </>
-  )
+  );
 }

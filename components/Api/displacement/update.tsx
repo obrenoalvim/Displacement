@@ -14,7 +14,7 @@ export default async function updateDisplacement(displacement: Displacement) {
     observacao: displacement.observacao,
     idCondutor: displacement.idCondutor,
     idVeiculo: displacement.idVeiculo,
-    idCliente: displacement.idCliente
+    idCliente: displacement.idCliente,
   });
 
   try {

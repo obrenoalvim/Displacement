@@ -31,7 +31,7 @@ export const Container = styled.main`
   .table .MuiTableCell-head svg {
     width: 18px;
     padding-top: 5px;
-    border: 1px soldi red
+    border: 1px soldi red;
   }
 
   .table .MuiTableRow-root.Mui-selected,

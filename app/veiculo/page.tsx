@@ -5,7 +5,7 @@ import CollapsibleTable from "../../components/Tables/TableVehicle";
 export default function Vehicle() {
   return (
     <>
-    <Seo/>
+      <Seo />
       <ResponsiveAppBar />
       <CollapsibleTable />
     </>

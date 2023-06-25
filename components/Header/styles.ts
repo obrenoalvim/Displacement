@@ -1,9 +1,9 @@
-import { Typography } from '@mui/material';
-import styled from 'styled-components';
+import { Typography } from "@mui/material";
+import styled from "styled-components";
 
 export const Container = styled.header`
   .appBar {
-    background-color: #1976D2;
+    background-color: #1976d2;
   }
 
   .logo {
@@ -23,7 +23,7 @@ export const StyledLink = styled(Typography)`
 `;
 
 export const DrawerPaper = styled.div`
-  background-color: #1976D2;
+  background-color: #1976d2;
   color: #f2f2f2;
 `;
 

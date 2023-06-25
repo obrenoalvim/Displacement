@@ -16,6 +16,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { format } from "date-fns";
 
 interface Props {
@@ -57,8 +59,12 @@ export default function Row(props: Props) {
         {!isMobile && <TableCell>{row.idCliente}</TableCell>}
 
         <TableCell>
-          <IconButton aria-label="edit" onClick={handleEdit}>
-            <EditIcon />
+          <IconButton
+            aria-label="finish"
+            onClick={handleEdit}
+            title="Encerrar Deslocamento"
+          >
+            <CheckCircleIcon />
           </IconButton>
 
           <IconButton aria-label="delete" onClick={handleDelete}>

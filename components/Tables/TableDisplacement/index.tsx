@@ -29,7 +29,6 @@ import getAllDisplacements from "../../Api/displacement";
 import deleteDisplacement from "../../Api/displacement/delete";
 import newDisplacement from "../../Api/displacement/add";
 import updateDisplacement from "../../Api/displacement/update";
-import { Displacement } from "@/types";
 import DialogLoading from "../../Utils/Dialog/Loading/page";
 import DialogError from "../../Utils/Dialog/Error/page";
 import { useMediaQuery } from "react-responsive";
@@ -38,8 +37,10 @@ import Row from "./Row";
 import getAllVehicles from "@/components/Api/vehicle";
 import getAllConductors from "@/components/Api/conductor";
 import getAllClients from "@/components/Api/client";
-import { Client, Vehicle, Conductor, Displacement } from '@/types';
+import { Client, Vehicle, Conductor, Displacement } from "@/types";
 import { formFieldsDisplacement } from "../../Form/FormFields/displacement";
+
+import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 
 export default function CollapsibleTable() {
   const [displacements, setDisplacements] = useState<Displacement[]>([]);
@@ -51,11 +52,14 @@ export default function CollapsibleTable() {
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteDisplacementId, setDeleteDisplacementId] = useState<number>(0);
-  const [deleteDisplacementName, setDeleteDisplacementName] = useState<string>("");
+  const [deleteDisplacementName, setDeleteDisplacementName] =
+    useState<string>("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogDisplacement, setDialogDisplacement] = useState<any | null>(null);
+  const [dialogDisplacement, setDialogDisplacement] = useState<any | null>(
+    null
+  );
   const [clients, setClients] = useState<Client[]>([]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [conductors, setConductors] = useState<Conductor[]>([]);
@@ -68,9 +72,6 @@ export default function CollapsibleTable() {
     fetchClients();
     fetchVehicles();
     fetchConductors();
-
-
-
   }, []);
 
   const fetchData = async () => {
@@ -125,9 +126,9 @@ export default function CollapsibleTable() {
   const handleAddNew = () => {
     setDialogDisplacement(null);
     setDialogOpen(true);
-    setIsEditing(false); 
+    setIsEditing(false);
   };
-  
+
   const handleEdit = (displacement: Displacement) => {
     setDialogDisplacement(displacement);
     setDialogOpen(true);
@@ -140,14 +141,10 @@ export default function CollapsibleTable() {
     try {
       if (displacement.id) {
         await updateDisplacement(displacement);
-        setSnackbarMessage(
-          `O deslocamento foi atualizado com sucesso!`
-        );
+        setSnackbarMessage(`O deslocamento foi atualizado com sucesso!`);
       } else {
         await newDisplacement(displacement);
-        setSnackbarMessage(
-          `O deslocamento foi cadastrado com sucesso!`
-        );
+        setSnackbarMessage(`O deslocamento foi cadastrado com sucesso!`);
       }
       setSnackbarOpen(true);
       fetchData();
@@ -196,9 +193,7 @@ export default function CollapsibleTable() {
     try {
       const response = await deleteDisplacement(deleteDisplacementId);
       if (response) {
-        setSnackbarMessage(
-          `O deslocamento foi excluído com sucesso!`
-        );
+        setSnackbarMessage(`O deslocamento foi excluído com sucesso!`);
         setSnackbarOpen(true);
         fetchData();
         fetchClients();
@@ -267,8 +262,8 @@ export default function CollapsibleTable() {
                 color="primary"
                 onClick={handleAddNew}
               >
-                <AddIcon />
-                <Typography>Novo Deslocamento</Typography>
+                <PlayCircleFilledIcon />
+                <Typography>Iniciar Deslocamento</Typography>
               </IconButton>
               <TextField
                 label="Pesquisar"
@@ -363,157 +358,151 @@ export default function CollapsibleTable() {
         </Dialog>
         <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
           <DialogTitle>
-            {dialogDisplacement?.id ? "Editar deslocamento" : "Novo deslocamento"}
+            {dialogDisplacement?.id
+              ? "Encerrar Deslocamento"
+              : "Iniciar Deslocamento"}
           </DialogTitle>
           <DialogContent>
+            <DialogContentText>Preencha os campos abaixo:</DialogContentText>
+            {formFieldsDisplacement.map((field) => {
+              const isEditingExistingDisplacement =
+                dialogDisplacement && dialogDisplacement.id;
+              const isNumeroDocumentoField = field.id === "numeroDocumento";
+              const shouldRenderField =
+                (!isEditingExistingDisplacement || !isNumeroDocumentoField) &&
+                (!isEditing ||
+                  (isEditing &&
+                    field.id !== "idVeiculo" &&
+                    field.id !== "idCliente"));
 
-
-
-  <DialogContentText>Preencha os campos abaixo:</DialogContentText>
-  {formFieldsDisplacement.map((field) => {
-    const isEditingExistingDisplacement =
-      dialogDisplacement && dialogDisplacement.id;
-    const isNumeroDocumentoField = field.id === "numeroDocumento";
-    const shouldRenderField =
-    (!isEditingExistingDisplacement || !isNumeroDocumentoField) &&
-    (!isEditing || (isEditing && field.id !== "idVeiculo" && field.id !== "idCliente"));
-
-      
-    if (shouldRenderField) {
-      if (isEditing) {
-        // Renderizar apenas os campos necessários para edição
-        if (
-          field.id === "kmFinal" ||
-          field.id === "fimDeslocamento" ||
-          field.id === "observacao"
-        ) {
-          return (
-            <TextField
-              key={field.id}
-              id={field.id}
-              label={field.label}
-              type={field.type ? field.type : "text"}
-              fullWidth
-              margin="normal"
-              value={dialogDisplacement?.[field.id] ?? ""}
-              onChange={(e) =>
-                setDialogDisplacement((prevState: any) => ({
-                  ...prevState,
-                  [field.id]: e.target.value,
-                }))
+              if (shouldRenderField) {
+                if (isEditing) {
+                  if (
+                    field.id === "kmFinal" ||
+                    field.id === "fimDeslocamento" ||
+                    field.id === "observacao"
+                  ) {
+                    return (
+                      <TextField
+                        key={field.id}
+                        id={field.id}
+                        label={field.label}
+                        type={field.type ? field.type : "text"}
+                        fullWidth
+                        margin="normal"
+                        value={dialogDisplacement?.[field.id] ?? ""}
+                        onChange={(e) =>
+                          setDialogDisplacement((prevState: any) => ({
+                            ...prevState,
+                            [field.id]: e.target.value,
+                          }))
+                        }
+                      />
+                    );
+                  }
+                } else {
+                  if (
+                    field.id === "kmInicial" ||
+                    field.id === "inicioDeslocamento" ||
+                    field.id === "checkList" ||
+                    field.id === "motivo" ||
+                    field.id === "observacao"
+                  ) {
+                    return (
+                      <TextField
+                        key={field.id}
+                        id={field.id}
+                        label={field.label}
+                        type={field.type ? field.type : "text"}
+                        fullWidth
+                        margin="normal"
+                        value={dialogDisplacement?.[field.id] ?? ""}
+                        onChange={(e) =>
+                          setDialogDisplacement((prevState: any) => ({
+                            ...prevState,
+                            [field.id]: e.target.value,
+                          }))
+                        }
+                      />
+                    );
+                  }
+                }
               }
-            />
-          );
-        }
-      } else {
-        // Renderizar apenas os campos necessários para novo deslocamento
-        if (
-          field.id === "kmInicial" ||
-          field.id === "inicioDeslocamento" ||
-          field.id === "checkList" ||
-          field.id === "motivo" ||
-          field.id === "observacao"
-        ) {
-          return (
-            <TextField
-              key={field.id}
-              id={field.id}
-              label={field.label}
-              type={field.type ? field.type : "text"}
-              fullWidth
-              margin="normal"
-              value={dialogDisplacement?.[field.id] ?? ""}
-              onChange={(e) =>
-                setDialogDisplacement((prevState: any) => ({
-                  ...prevState,
-                  [field.id]: e.target.value,
-                }))
-              }
-            />
-          );
-        }
-      }
-    }
-    return null;
-  })}
+              return null;
+            })}
 
+            {isEditing ? null : (
+              <>
+                <TextField
+                  key="idCondutor"
+                  select
+                  label="Condutor"
+                  onChange={(e) =>
+                    setDialogDisplacement((prevState: any) => ({
+                      ...prevState,
+                      [formFieldsDisplacement[7].id]: e.target.value,
+                    }))
+                  }
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                >
+                  {conductors.map((conductor) => (
+                    <MenuItem key={conductor.id} value={conductor.id}>
+                      {conductor.nome}
+                    </MenuItem>
+                  ))}
+                </TextField>
 
+                <TextField
+                  key="idVeiculo"
+                  select
+                  label="Veículo"
+                  onChange={(e) =>
+                    setDialogDisplacement((prevState: any) => ({
+                      ...prevState,
+                      [formFieldsDisplacement[8].id]: e.target.value,
+                    }))
+                  }
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                >
+                  {vehicles.map((vehicle) => (
+                    <MenuItem key={vehicle.id} value={vehicle.id}>
+                      {vehicle.placa}
+                    </MenuItem>
+                  ))}
+                </TextField>
 
-                            <TextField
-                    key="idCondutor"
-                    select
-                    label="Condutor"
-                    onChange={(e) =>
-                      setDialogDisplacement((prevState: any) => ({
-                        ...prevState,
-                        [formFieldsDisplacement[7].id]: e.target.value,
-                      }))
-                    }
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                  >
-                    {conductors.map((conductor) => (
-                      <MenuItem key={conductor.id} value={conductor.id}>
-                        {conductor.nome}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-
-
-                  <TextField
-                    key="idVeiculo"
-                    select
-                    label="Veículo"
-                    onChange={(e) =>
-                      setDialogDisplacement((prevState: any) => ({
-                        ...prevState,
-                        [formFieldsDisplacement[8].id]: e.target.value,
-                      }))
-                    }
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                  >
-                    {vehicles.map((vehicle) => (
-                      <MenuItem key={vehicle.id} value={vehicle.id}>
-                        {vehicle.placa}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-
-
-                  <TextField
-                    key="idCliente"
-                    select
-                    label="Cliente"
-                    onChange={(e) =>
-                      setDialogDisplacement((prevState: any) => ({
-                        ...prevState,
-                        [formFieldsDisplacement[9].id]: e.target.value,
-                      }))
-                    }
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                  >
-                    {clients.map((client) => (
-                      <MenuItem key={client.id} value={client.id}>
-                        {client.nome}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-
-
-
-
-                    
-                    
-
+                <TextField
+                  key="idCliente"
+                  select
+                  label="Cliente"
+                  onChange={(e) =>
+                    setDialogDisplacement((prevState: any) => ({
+                      ...prevState,
+                      [formFieldsDisplacement[9].id]: e.target.value,
+                    }))
+                  }
+                  variant="outlined"
+                  fullWidth
+                  margin="normal"
+                >
+                  {clients.map((client) => (
+                    <MenuItem key={client.id} value={client.id}>
+                      {client.nome}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </>
+            )}
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setDialogOpen(false)}>Cancelar</Button>
-            <Button onClick={() => handleSave(dialogDisplacement)}>Salvar</Button>
+            <Button onClick={() => handleSave(dialogDisplacement)}>
+              Salvar
+            </Button>
           </DialogActions>
         </Dialog>
         <Snackbar

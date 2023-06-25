@@ -1,2 +1,3 @@
 # TesteSecretariaNaty
-Teste para vaga de Desenvolvedor Front-end 
+
+Teste para vaga de Desenvolvedor Front-end

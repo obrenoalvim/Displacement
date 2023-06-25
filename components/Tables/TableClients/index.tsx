@@ -35,9 +35,9 @@ import { useMediaQuery } from "react-responsive";
 import { Container } from "../TableStyle/styles";
 import Row from "./Row";
 import { formFieldsClient } from "../../Form/FormFields/client";
-import BadgeIcon from '@mui/icons-material/Badge';
-import LocationCityIcon from '@mui/icons-material/LocationCity';
-import PlaceIcon from '@mui/icons-material/Place';
+import BadgeIcon from "@mui/icons-material/Badge";
+import LocationCityIcon from "@mui/icons-material/LocationCity";
+import PlaceIcon from "@mui/icons-material/Place";
 
 export default function CollapsibleTable() {
   const [clients, setClients] = useState<Client[]>([]);
@@ -248,7 +248,7 @@ export default function CollapsibleTable() {
                 </IconButton>
               </TableCell>
               <TableCell>
-                <BadgeIcon fontSize="small"/>
+                <BadgeIcon fontSize="small" />
                 <strong>Nome</strong>
               </TableCell>
               <TableCell>
