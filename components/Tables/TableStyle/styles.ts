@@ -39,9 +39,36 @@ export const Container = styled.main`
     background-color: #e8eaf6;
   }
 
+  .table .title-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* margin-bottom: 15px; */
+    margin-left: 15px;
+    flex-wrap: wrap
+  }
+
+  .table .title-bar h6 {
+    margin: 0;
+  }
+
+  .table .search-bar {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+  }
+
+  .table .MuiTextField-root {
+    margin-left: 10px;
+  }
+
   @media (max-width: 768px) {
     .table {
       width: 100%;
+    }
+
+    .table .title-bar h6 {
+      
     }
 
     .table .MuiTableContainer-root {

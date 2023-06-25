@@ -141,10 +141,10 @@ export default function CollapsibleTable() {
     try {
       if (displacement.id) {
         await updateDisplacement(displacement);
-        setSnackbarMessage(`O deslocamento foi atualizado com sucesso!`);
+        setSnackbarMessage(`O deslocamento foi encerrado com sucesso!`);
       } else {
         await newDisplacement(displacement);
-        setSnackbarMessage(`O deslocamento foi cadastrado com sucesso!`);
+        setSnackbarMessage(`O deslocamento foi iniciado com sucesso!`);
       }
       setSnackbarOpen(true);
       fetchData();
@@ -296,15 +296,18 @@ export default function CollapsibleTable() {
                 </IconButton>
               </TableCell>
               <TableCell>
-                <strong>Nome</strong>
+                <strong>Motivo</strong>
               </TableCell>
               <TableCell>
-                <strong>Categoria</strong>
+                <strong>Início</strong>
+              </TableCell>
+              <TableCell>
+                <strong>Fim</strong>
               </TableCell>
 
               {!isMobile && (
                 <TableCell>
-                  <strong>Nº Habilitação</strong>
+                  <strong>Observação</strong>
                 </TableCell>
               )}
 

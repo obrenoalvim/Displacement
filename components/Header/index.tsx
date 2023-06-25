@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image"
+import Image from "next/image";
 import {
   AppBar,
   Toolbar,
@@ -18,7 +18,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
 import DriveEtaIcon from "@mui/icons-material/DriveEta";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-
 
 import { Container, StyledLink, RightLinks } from "./styles";
 
@@ -80,16 +79,12 @@ export default function Header() {
       <AppBar position="static" className="appBar">
         <Toolbar>
           <Link href="/">
-            <Image 
-            src="/logo-white-removebg.png" 
-            width={50}
-            height={50}
-            alt="Picture of the author"/>
-            {/* <Typography variant="h6" className="logo">
-              <StyledLink color="inherit">
-                APPNATY
-              </StyledLink>
-            </Typography> */}
+            <Image
+              src="/logo-white-removebg.png"
+              width={50}
+              height={50}
+              alt="Picture of the author"
+            />
           </Link>
           <div style={{ flex: 1 }} /> {/* Espaço flexível */}
           {renderLinks()}

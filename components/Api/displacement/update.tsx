@@ -7,19 +7,14 @@ export default async function updateDisplacement(displacement: Displacement) {
 
   var body = JSON.stringify({
     id: displacement.id,
-    kmInicial: displacement.kmInicial,
-    inicioDeslocamento: displacement.inicioDeslocamento,
-    checkList: displacement.checkList,
-    motivo: displacement.motivo,
+    kmFinal: displacement.kmFinal,
+    fimDeslocamento: displacement.fimDeslocamento,
     observacao: displacement.observacao,
-    idCondutor: displacement.idCondutor,
-    idVeiculo: displacement.idVeiculo,
-    idCliente: displacement.idCliente,
   });
 
   try {
     const response = await fetch(
-      `${environment.BASE_URL}Deslocamento/${displacement.id}/EncerrarDelocamento`,
+      `${environment.BASE_URL}Deslocamento/${displacement.id}/EncerrarDeslocamento`,
       {
         method: "PUT",
         headers: myHeaders,

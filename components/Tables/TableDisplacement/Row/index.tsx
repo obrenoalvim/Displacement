@@ -54,19 +54,23 @@ export default function Row(props: Props) {
         </TableCell>
 
         <TableCell>{row.motivo}</TableCell>
-        <TableCell>{row.kmInicial}</TableCell>
+        <TableCell>{format( new Date(row.inicioDeslocamento), "dd/mm/yyyy")}</TableCell>
+        <TableCell>{row.fimDeslocamento == null ? 'Não encerrado' : format( new Date(row.fimDeslocamento), "dd/mm/yyyy") }</TableCell>
 
-        {!isMobile && <TableCell>{row.idCliente}</TableCell>}
+        {!isMobile && <TableCell>{row.observacao}</TableCell>}
 
         <TableCell>
-          <IconButton
+          {row.fimDeslocamento != null ? null : (
+
+            <IconButton
             aria-label="finish"
             onClick={handleEdit}
             title="Encerrar Deslocamento"
-          >
+            >
             <CheckCircleIcon />
           </IconButton>
 
+            )}
           <IconButton aria-label="delete" onClick={handleDelete}>
             <DeleteIcon />
           </IconButton>
@@ -82,12 +86,16 @@ export default function Row(props: Props) {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Vencimento Habilitação</TableCell>
+                    <TableCell>Km Inicial</TableCell>
+                    <TableCell>Km Final</TableCell>
+                    <TableCell>CheckList</TableCell>
                     {isMobile && <TableCell>Nº Habilitação</TableCell>}
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   <TableRow>
+                    <TableCell>{row.kmInicial}</TableCell>
+                    <TableCell>{row.kmFinal != null ? row.kmFinal : "Não encerrado"}</TableCell>
                     <TableCell>{row.checkList}</TableCell>
                     {isMobile && <TableCell>{row.observacao}</TableCell>}
                   </TableRow>
