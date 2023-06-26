@@ -83,10 +83,10 @@ export default function Header() {
               src="/logo-white-removebg.png"
               width={50}
               height={50}
-              alt="Picture of the author"
+              alt="Logo"
             />
           </Link>
-          <div style={{ flex: 1 }} /> {/* Espaço flexível */}
+          <div style={{ flex: 1 }} /> 
           {renderLinks()}
           <Drawer anchor="right" open={isMenuOpen} onClose={toggleMenu}>
             <List>
