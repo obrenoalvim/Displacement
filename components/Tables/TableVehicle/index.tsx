@@ -35,9 +35,9 @@ import { useMediaQuery } from "react-responsive";
 import { Container } from "../TableStyle/styles";
 import Row from "./Row";
 import { formFieldsVehicle } from "../../Form/FormFields/vehicle";
-import Filter1Icon from '@mui/icons-material/Filter1';
-import DateRangeIcon from '@mui/icons-material/DateRange';
-import BrandingWatermarkIcon from '@mui/icons-material/BrandingWatermark';
+import Filter1Icon from "@mui/icons-material/Filter1";
+import DateRangeIcon from "@mui/icons-material/DateRange";
+import BrandingWatermarkIcon from "@mui/icons-material/BrandingWatermark";
 
 export default function CollapsibleTable() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -191,7 +191,7 @@ export default function CollapsibleTable() {
   return (
     <Container>
       <TableContainer className="table" component={Paper}>
-      <div className="title-bar">
+        <div className="title-bar">
           <Typography variant="h6">Veículos</Typography>
           <div className="search-bar">
             <IconButton
@@ -216,6 +216,7 @@ export default function CollapsibleTable() {
                   </InputAdornment>
                 ),
               }}
+              InputLabelProps={{ shrink: true }}
             />
           </div>
         </div>
@@ -233,17 +234,17 @@ export default function CollapsibleTable() {
                 </IconButton>
               </TableCell>
               <TableCell>
-                <Filter1Icon fontSize="small" className="icon"/>
+                <Filter1Icon fontSize="small" className="icon" />
                 <strong>Placa</strong>
               </TableCell>
               <TableCell>
-              <BrandingWatermarkIcon fontSize="small" className="icon"/>
+                <BrandingWatermarkIcon fontSize="small" className="icon" />
                 <strong>Marca/Modelo</strong>
               </TableCell>
 
               {!isMobile && (
                 <TableCell>
-                  <DateRangeIcon fontSize="small" className="icon"/>
+                  <DateRangeIcon fontSize="small" className="icon" />
                   <strong>Ano Fabricação</strong>
                 </TableCell>
               )}
@@ -324,6 +325,7 @@ export default function CollapsibleTable() {
                         [field.id]: e.target.value,
                       }))
                     }
+                    InputLabelProps={{ shrink: true }}
                   />
                 );
               }

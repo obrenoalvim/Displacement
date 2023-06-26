@@ -183,13 +183,15 @@ export default function CollapsibleTable() {
     if (!searchTerm) {
       return displacements.sort((a, b) => b.id - a.id);
     }
-  
+
     const filtered = displacements.filter((displacement) =>
-      Object.values(displacement).some((value) =>
-        value && value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      Object.values(displacement).some(
+        (value) =>
+          value &&
+          value.toString().toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
-  
+
     return filtered.sort((a, b) => b.id - a.id);
   };
 
@@ -250,7 +252,8 @@ export default function CollapsibleTable() {
 
   const filteredDisplacements = filterDisplacements();
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, filteredDisplacements.length - page * rowsPerPage);
+    rowsPerPage -
+    Math.min(rowsPerPage, filteredDisplacements.length - page * rowsPerPage);
 
   return (
     <Container>
@@ -412,6 +415,7 @@ export default function CollapsibleTable() {
                             [field.id]: e.target.value,
                           }))
                         }
+                        InputLabelProps={{ shrink: true }}
                       />
                     );
                   }
@@ -438,6 +442,7 @@ export default function CollapsibleTable() {
                             [field.id]: e.target.value,
                           }))
                         }
+                        InputLabelProps={{ shrink: true }}
                       />
                     );
                   }

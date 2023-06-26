@@ -299,7 +299,7 @@ export default function CollapsibleTable() {
         </Dialog>
         <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
           <DialogTitle>
-            {dialogClient ? "Editar cliente" : "Novo cliente"}
+            {dialogClient ? "Editar Cliente" : "Novo Cliente"}
           </DialogTitle>
           <DialogContent>
             <DialogContentText>Preencha os campos abaixo:</DialogContentText>
@@ -323,6 +323,7 @@ export default function CollapsibleTable() {
                         [field.id]: e.target.value,
                       }))
                     }
+                    InputLabelProps={{ shrink: true }}
                   />
                 );
               }

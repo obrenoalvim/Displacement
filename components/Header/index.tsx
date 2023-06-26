@@ -86,7 +86,7 @@ export default function Header() {
               alt="Logo"
             />
           </Link>
-          <div style={{ flex: 1 }} /> 
+          <div style={{ flex: 1 }} />
           {renderLinks()}
           <Drawer anchor="right" open={isMenuOpen} onClose={toggleMenu}>
             <List>

@@ -192,7 +192,7 @@ export default function CollapsibleTable() {
   return (
     <Container>
       <TableContainer className="table" component={Paper}>
-      <div className="title-bar">
+        <div className="title-bar">
           <Typography variant="h6">Condutores</Typography>
           <div className="search-bar">
             <IconButton
@@ -299,7 +299,7 @@ export default function CollapsibleTable() {
         </Dialog>
         <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
           <DialogTitle>
-            {dialogConductor?.id ? "Editar condutor" : "Novo condutor"}
+            {dialogConductor?.id ? "Editar Condutor" : "Novo Condutor"}
           </DialogTitle>
           <DialogContent>
             <DialogContentText>Preencha os campos abaixo:</DialogContentText>
@@ -325,6 +325,7 @@ export default function CollapsibleTable() {
                         [field.id]: e.target.value,
                       }))
                     }
+                    InputLabelProps={{ shrink: true }}
                   />
                 );
               }
