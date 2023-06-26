@@ -250,48 +250,34 @@ export default function CollapsibleTable() {
   return (
     <Container>
       <TableContainer className="table" component={Paper}>
-        <Grid
-          container
-          alignItems="center"
-          justifyContent="space-between"
-          mb={2}
-          style={{
-            marginTop: "20px",
-            paddingRight: "15px",
-            paddingLeft: "15px",
-          }}
-        >
-          <Grid item>
-            <Typography variant="h6">Deslocamentos</Typography>
-          </Grid>
-          <Grid item>
-            <Grid container alignItems="center">
-              <IconButton
-                className="buttonNew"
-                aria-label="add"
-                color="primary"
-                onClick={handleAddNew}
-              >
-                <PlayCircleFilledIcon />
-                <Typography>Iniciar Deslocamento</Typography>
-              </IconButton>
-              <TextField
-                label="Pesquisar"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                variant="outlined"
-                size="small"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-          </Grid>
-        </Grid>
+        <div className="title-bar">
+          <Typography variant="h6">Deslocamentos</Typography>
+          <div className="search-bar">
+            <IconButton
+              className="buttonNew"
+              aria-label="add"
+              color="primary"
+              onClick={handleAddNew}
+            >
+              <PlayCircleFilledIcon />
+              <Typography>Iniciar Deslocamentos</Typography>
+            </IconButton>
+            <TextField
+              label="Pesquisar"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              variant="outlined"
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </div>
+        </div>
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
