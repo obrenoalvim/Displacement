@@ -59,11 +59,19 @@ export default function Row(props: Props) {
         {!isMobile && <TableCell>{row.uf}</TableCell>}
 
         <TableCell>
-          <IconButton title="Editar Cliente" aria-label="edit" onClick={handleEdit}>
+          <IconButton
+            title="Editar Cliente"
+            aria-label="edit"
+            onClick={handleEdit}
+          >
             <EditIcon style={{ color: "grey" }} />
           </IconButton>
 
-          <IconButton title="Deletar Cliente" aria-label="delete" onClick={handleDelete}>
+          <IconButton
+            title="Deletar Cliente"
+            aria-label="delete"
+            onClick={handleDelete}
+          >
             <DeleteIcon style={{ color: "red" }} />
           </IconButton>
         </TableCell>
@@ -79,15 +87,15 @@ export default function Row(props: Props) {
                 <TableHead>
                   <TableRow>
                     <TableCell>
-                      <FolderCopyIcon fontSize="small" />
+                      <FolderCopyIcon fontSize="small" className="icon" />
                       Nº Doc.
                     </TableCell>
                     <TableCell>
-                      <HouseIcon fontSize="small" />
+                      <HouseIcon fontSize="small" className="icon" />
                       Logradouro
                     </TableCell>
                     <TableCell>
-                      <HolidayVillageIcon fontSize="small" />
+                      <HolidayVillageIcon fontSize="small" className="icon" />
                       Bairro
                     </TableCell>
                     {isMobile && <TableCell>UF</TableCell>}

@@ -15,9 +15,10 @@ import { useMediaQuery } from "react-responsive";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import EmojiFlagsIcon from "@mui/icons-material/EmojiFlags";
+import AssistantPhotoIcon from "@mui/icons-material/AssistantPhoto";
 import { format } from "date-fns";
 
 interface Props {
@@ -57,12 +58,14 @@ export default function Row(props: Props) {
         <TableCell>
           {format(new Date(row.inicioDeslocamento), "dd/mm/yyyy")}
         </TableCell>
-        <TableCell>
-          {row.fimDeslocamento == null
-            ? "Não encerrado"
-            : format(new Date(row.fimDeslocamento), "dd/mm/yyyy")}
-        </TableCell>
 
+        {!isMobile && (
+          <TableCell>
+            {row.fimDeslocamento == null
+              ? "Não encerrado"
+              : format(new Date(row.fimDeslocamento), "dd/mm/yyyy")}
+          </TableCell>
+        )}
         {!isMobile && <TableCell>{row.observacao}</TableCell>}
 
         <TableCell>
@@ -90,9 +93,24 @@ export default function Row(props: Props) {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Km Inicial</TableCell>
-                    <TableCell>Km Final</TableCell>
-                    <TableCell>CheckList</TableCell>
+                    <TableCell>
+                      {" "}
+                      <EmojiFlagsIcon fontSize="small" className="icon" /> Km
+                      Inicial
+                    </TableCell>
+                    <TableCell>
+                      {" "}
+                      <AssistantPhotoIcon
+                        fontSize="small"
+                        className="icon"
+                      />{" "}
+                      Km Final
+                    </TableCell>
+                    <TableCell>
+                      {" "}
+                      <ChecklistIcon fontSize="small" className="icon" />{" "}
+                      CheckList
+                    </TableCell>
                     {isMobile && <TableCell>Nº Habilitação</TableCell>}
                   </TableRow>
                 </TableHead>

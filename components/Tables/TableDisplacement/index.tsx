@@ -41,6 +41,12 @@ import { Client, Vehicle, Conductor, Displacement } from "@/types";
 import { formFieldsDisplacement } from "../../Form/FormFields/displacement";
 
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
+import NotesIcon from "@mui/icons-material/Notes";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
+import StartIcon from "@mui/icons-material/Start";
+
+import FormatAlignJustifyIcon from "@mui/icons-material/FormatAlignJustify";
 
 export default function CollapsibleTable() {
   const [displacements, setDisplacements] = useState<Displacement[]>([]);
@@ -154,6 +160,10 @@ export default function CollapsibleTable() {
     } catch (error) {
       setSnackbarMessage(`Erro ao salvar deslocamento.`);
       setSnackbarOpen(true);
+      fetchData();
+      fetchClients();
+      fetchVehicles();
+      fetchConductors();
     }
   };
 
@@ -296,17 +306,28 @@ export default function CollapsibleTable() {
                 </IconButton>
               </TableCell>
               <TableCell>
+                <NotesIcon fontSize="small" className="icon" />
                 <strong>Motivo</strong>
               </TableCell>
               <TableCell>
+                <StartIcon fontSize="small" className="icon" />
                 <strong>Início</strong>
               </TableCell>
-              <TableCell>
+              {/* <TableCell>
+              <DoneAllIcon fontSize="small" className="icon" />
                 <strong>Fim</strong>
-              </TableCell>
+              </TableCell> */}
 
               {!isMobile && (
                 <TableCell>
+                  <DoneAllIcon fontSize="small" className="icon" />
+                  <strong>Fim</strong>
+                </TableCell>
+              )}
+
+              {!isMobile && (
+                <TableCell>
+                  <FormatAlignJustifyIcon fontSize="small" className="icon" />
                   <strong>Observação</strong>
                 </TableCell>
               )}

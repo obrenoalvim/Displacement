@@ -24,6 +24,10 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
+import BadgeIcon from "@mui/icons-material/Badge";
+import ClassIcon from "@mui/icons-material/Class";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
+import RuleIcon from "@mui/icons-material/Rule";
 import getAllConductors from "../../Api/conductor";
 import deleteConductor from "../../Api/conductor/delete";
 import newConductor from "../../Api/conductor/add";
@@ -244,14 +248,17 @@ export default function CollapsibleTable() {
                 </IconButton>
               </TableCell>
               <TableCell>
+                <BadgeIcon fontSize="small" className="icon" />
                 <strong>Nome</strong>
               </TableCell>
               <TableCell>
+                <ClassIcon fontSize="small" className="icon" />
                 <strong>Categoria</strong>
               </TableCell>
 
               {!isMobile && (
                 <TableCell>
+                  <HowToRegIcon fontSize="small" className="icon" />
                   <strong>Nº Habilitação</strong>
                 </TableCell>
               )}

@@ -16,6 +16,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import RuleIcon from "@mui/icons-material/Rule";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
 import { format } from "date-fns";
 
 interface Props {
@@ -57,11 +59,19 @@ export default function Row(props: Props) {
         {!isMobile && <TableCell>{row.numeroHabilitacao}</TableCell>}
 
         <TableCell>
-          <IconButton title="Editar Condutor" aria-label="edit" onClick={handleEdit}>
+          <IconButton
+            title="Editar Condutor"
+            aria-label="edit"
+            onClick={handleEdit}
+          >
             <EditIcon style={{ color: "grey" }} />
           </IconButton>
 
-          <IconButton title="Deletar Condutor" aria-label="delete" onClick={handleDelete}>
+          <IconButton
+            title="Deletar Condutor"
+            aria-label="delete"
+            onClick={handleDelete}
+          >
             <DeleteIcon style={{ color: "red" }} />
           </IconButton>
         </TableCell>
@@ -76,8 +86,18 @@ export default function Row(props: Props) {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Vencimento Habilitação</TableCell>
-                    {isMobile && <TableCell>Nº Habilitação</TableCell>}
+                    <TableCell>
+                      {" "}
+                      <RuleIcon fontSize="small" className="icon" /> Vencimento
+                      Habilitação
+                    </TableCell>
+                    {isMobile && (
+                      <TableCell>
+                        {" "}
+                        <HowToRegIcon fontSize="small" className="icon" /> Nº
+                        Habilitação
+                      </TableCell>
+                    )}
                   </TableRow>
                 </TableHead>
                 <TableBody>

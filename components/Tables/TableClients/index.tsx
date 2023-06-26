@@ -234,17 +234,17 @@ export default function CollapsibleTable() {
                 </IconButton>
               </TableCell>
               <TableCell>
-                <BadgeIcon fontSize="small" />
+                <BadgeIcon fontSize="small" className="icon" />
                 <strong>Nome</strong>
               </TableCell>
               <TableCell>
-                <LocationCityIcon fontSize="small" />
+                <LocationCityIcon fontSize="small" className="icon" />
                 <strong>Cidade</strong>
               </TableCell>
 
               {!isMobile && (
                 <TableCell>
-                  <PlaceIcon fontSize="small" />
+                  <PlaceIcon fontSize="small" className="icon" />
                   <strong>Uf</strong>
                 </TableCell>
               )}

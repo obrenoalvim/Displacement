@@ -28,10 +28,18 @@ export const Container = styled.main`
     font-weight: bold;
   }
 
-  .table .MuiTableCell-head svg {
-    width: 18px;
-    padding-top: 5px;
-    border: 1px soldi red;
+  .table .MuiTableCell-head .icon {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 3px;
+    vertical-align: middle;
+  }
+
+  .table .MuiTableCell-head strong {
+    font-size: 15px;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
   }
 
   .table .MuiTableRow-root.Mui-selected,
@@ -43,13 +51,13 @@ export const Container = styled.main`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /* margin-bottom: 15px; */
     margin-left: 15px;
     flex-wrap: wrap;
   }
 
   .table .title-bar h6 {
     margin: 0;
+    font-weight: bold;
   }
 
   .table .search-bar {
@@ -67,11 +75,12 @@ export const Container = styled.main`
       width: 100%;
     }
 
-    .table .title-bar h6 {
-    }
-
     .table .MuiTableContainer-root {
       overflow-x: auto;
+    }
+
+    .table .MuiTableCell-head .icon {
+      display: none;
     }
   }
 `;
