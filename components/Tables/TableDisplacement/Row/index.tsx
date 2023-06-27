@@ -25,7 +25,6 @@ import DriveEtaIcon from "@mui/icons-material/DriveEta";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-
 import { Displacement, Client, Vehicle, Conductor } from "@/types";
 import getConductor from "../../../Api/conductor/conductor";
 import getClient from "../../../Api/client/client";
@@ -103,22 +102,55 @@ export default function Row(props: Props) {
       case "conductor":
         return (
           <>
-            <Typography variant="h6">Detalhes do Condutor:</Typography>
-            <Typography>{selectedEntity.data.nome}</Typography>
+            <Typography variant="h6" style={{ marginBottom: "5px" }}>
+              Detalhes do Condutor:
+            </Typography>
+            <Typography>
+              <strong>Nome:</strong> {selectedEntity.data.nome}
+            </Typography>
+            <Typography>
+              <strong>Nº Habilitação:</strong>{" "}
+              {selectedEntity.data.numeroHabilitacao}
+            </Typography>
+            <Typography>
+              <strong>Categoria:</strong>{" "}
+              {selectedEntity.data.catergoriaHabilitacao}
+            </Typography>
+            <Typography>
+              <strong>Vencimento:</strong>{" "}
+              {format(
+                new Date(selectedEntity.data.vencimentoHabilitacao),
+                "dd/MM/yyyy"
+              )}
+            </Typography>
           </>
         );
       case "client":
         return (
           <>
-            <Typography variant="h6">Detalhes do Cliente:</Typography>
-            <Typography>{selectedEntity.data.nome}</Typography>
+            <Typography variant="h6" style={{ marginBottom: "5px" }}>
+              Detalhes do Cliente:
+            </Typography>
+            <Typography><strong>Nome: </strong>{selectedEntity.data.nome}</Typography>
+            <Typography><strong>Logradouro: </strong>{selectedEntity.data.logradouro}</Typography>
+            <Typography><strong>Número: </strong>{selectedEntity.data.numero}</Typography>
+            <Typography><strong>Bairro: </strong>{selectedEntity.data.bairro}</Typography>
+            <Typography><strong>Cidade: </strong>{selectedEntity.data.cidade}</Typography>
+            <Typography><strong>Uf: </strong>{selectedEntity.data.uf}</Typography>
+            <Typography><strong>Nº Documento: </strong>{selectedEntity.data.numeroDocumento}</Typography>
+            <Typography><strong>Tipo Documento: </strong>{selectedEntity.data.tipoDocumento}</Typography>
           </>
         );
       case "vehicle":
         return (
           <>
-            <Typography variant="h6">Detalhes do Veículo:</Typography>
-            <Typography>{selectedEntity.data.placa}</Typography>
+            <Typography variant="h6" style={{ marginBottom: "5px" }}>
+              Detalhes do Veículo:
+            </Typography>
+            <Typography><strong>Placa: </strong>{selectedEntity.data.placa}</Typography>
+            <Typography><strong>Marca/Modelo: </strong>{selectedEntity.data.marcaModelo}</Typography>
+            <Typography><strong>Ano Fabricação: </strong>{selectedEntity.data.anoFabricacao}</Typography>
+            <Typography><strong>Km Atual: </strong>{selectedEntity.data.kmAtual}</Typography>
           </>
         );
       default:
