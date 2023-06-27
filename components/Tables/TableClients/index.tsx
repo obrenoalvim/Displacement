@@ -189,6 +189,10 @@ export default function CollapsibleTable() {
     rowsPerPage -
     Math.min(rowsPerPage, filteredClients.length - page * rowsPerPage);
 
+    function capitalizeFirstLetter(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
   return (
     <Container>
       <TableContainer className="table" component={Paper}>
@@ -299,7 +303,7 @@ export default function CollapsibleTable() {
         </Dialog>
         <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
           <DialogTitle>
-            {dialogClient ? "Editar Cliente" : "Novo Cliente"}
+            {dialogClient?.id ? "Editar Cliente" : "Novo Cliente"}
           </DialogTitle>
           <DialogContent>
             <DialogContentText>Preencha os campos abaixo:</DialogContentText>
@@ -320,10 +324,10 @@ export default function CollapsibleTable() {
                     onChange={(e) =>
                       setDialogClient((prevState: any) => ({
                         ...prevState,
-                        [field.id]: e.target.value,
+                        [field.id]: capitalizeFirstLetter(e.target.value),
                       }))
                     }
-                    InputLabelProps={{ shrink: true }}
+                    InputLabelProps={{ shrink: true}}
                   />
                 );
               }

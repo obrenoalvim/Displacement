@@ -80,9 +80,6 @@ export default function Row(props: Props) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              {/* <Typography variant="h6" gutterBottom component="div">
-                Mais informações
-              </Typography> */}
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
@@ -96,7 +93,7 @@ export default function Row(props: Props) {
                     </TableCell>
                     <TableCell>
                       <HolidayVillageIcon fontSize="small" className="icon" />
-                      Bairro
+                      Bairro / Nº
                     </TableCell>
                     {isMobile && <TableCell>UF</TableCell>}
                   </TableRow>
@@ -105,7 +102,7 @@ export default function Row(props: Props) {
                   <TableRow>
                     <TableCell>{row.numeroDocumento}</TableCell>
                     <TableCell>{row.logradouro}</TableCell>
-                    <TableCell>{row.bairro}</TableCell>
+                    <TableCell>{`${row.bairro} (${row.numero})`}</TableCell>
                     {isMobile && <TableCell>{row.uf}</TableCell>}
                   </TableRow>
                 </TableBody>
