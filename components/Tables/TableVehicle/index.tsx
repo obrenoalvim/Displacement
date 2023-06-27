@@ -12,7 +12,6 @@ import {
   TablePagination,
   TextField,
   InputAdornment,
-  Grid,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -21,39 +20,44 @@ import {
   Button,
   Snackbar,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import AddIcon from "@mui/icons-material/Add";
-import getAllVehicles from "../../Api/vehicle";
-import deleteVehicle from "../../Api/vehicle/delete";
-import newVehicle from "../../Api/vehicle/add";
-import updateVehicle from "../../Api/vehicle/update";
+import Row from "./Row";
 import { Vehicle } from "@/types";
-import DialogLoading from "../../Utils/Dialog/Loading/page";
-import DialogError from "../../Utils/Dialog/Error/page";
 import { useMediaQuery } from "react-responsive";
 import { Container } from "../TableStyle/styles";
-import Row from "./Row";
+import DialogError from "../../Utils/Dialog/Error/page";
+import DialogLoading from "../../Utils/Dialog/Loading/page";
 import { formFieldsVehicle } from "../../Form/FormFields/vehicle";
+
+// Icons
+import AddIcon from "@mui/icons-material/Add";
+import SearchIcon from "@mui/icons-material/Search";
 import Filter1Icon from "@mui/icons-material/Filter1";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import BrandingWatermarkIcon from "@mui/icons-material/BrandingWatermark";
 
+// Functions
+import getAllVehicles from "../../Api/vehicle";
+import newVehicle from "../../Api/vehicle/add";
+import deleteVehicle from "../../Api/vehicle/delete";
+import updateVehicle from "../../Api/vehicle/update";
+
 export default function CollapsibleTable() {
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(0);
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [deleteVehicleId, setDeleteVehicleId] = useState<number>(0);
-  const [deleteVehicleName, setDeleteVehicleName] = useState<string>("");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteVehicleId, setDeleteVehicleId] = useState<number>(0);
   const [dialogVehicle, setDialogVehicle] = useState<any | null>(null);
+  const [deleteVehicleName, setDeleteVehicleName] = useState<string>("");
+
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Dialog, Typography } from "@mui/material";
+import { Box, Dialog, Typography } from "@mui/material";
 
 interface DialogErrorProps {
   error: boolean;

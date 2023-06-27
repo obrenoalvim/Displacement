@@ -11,14 +11,16 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import { format } from "date-fns";
 import { useMediaQuery } from "react-responsive";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import DeleteIcon from "@mui/icons-material/Delete";
+
+// Icons
 import EditIcon from "@mui/icons-material/Edit";
 import RuleIcon from "@mui/icons-material/Rule";
+import DeleteIcon from "@mui/icons-material/Delete";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
-import { format } from "date-fns";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 interface Props {
   row: Conductor;

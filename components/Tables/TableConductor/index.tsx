@@ -12,7 +12,6 @@ import {
   TablePagination,
   TextField,
   InputAdornment,
-  Grid,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -21,40 +20,44 @@ import {
   Button,
   Snackbar,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import AddIcon from "@mui/icons-material/Add";
-import BadgeIcon from "@mui/icons-material/Badge";
-import ClassIcon from "@mui/icons-material/Class";
-import HowToRegIcon from "@mui/icons-material/HowToReg";
-import RuleIcon from "@mui/icons-material/Rule";
-import getAllConductors from "../../Api/conductor";
-import deleteConductor from "../../Api/conductor/delete";
-import newConductor from "../../Api/conductor/add";
-import updateConductor from "../../Api/conductor/update";
+import Row from "./Row";
 import { Conductor } from "@/types";
-import DialogLoading from "../../Utils/Dialog/Loading/page";
-import DialogError from "../../Utils/Dialog/Error/page";
 import { useMediaQuery } from "react-responsive";
 import { Container } from "../TableStyle/styles";
-import Row from "./Row";
+import DialogError from "../../Utils/Dialog/Error/page";
+import DialogLoading from "../../Utils/Dialog/Loading/page";
 import { formFieldsConductor } from "../../Form/FormFields/conductor";
 
+// Icons
+import AddIcon from "@mui/icons-material/Add";
+import ClassIcon from "@mui/icons-material/Class";
+import BadgeIcon from "@mui/icons-material/Badge";
+import SearchIcon from "@mui/icons-material/Search";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
+
+// Functions
+import newConductor from "../../Api/conductor/add";
+import getAllConductors from "../../Api/conductor";
+import deleteConductor from "../../Api/conductor/delete";
+import updateConductor from "../../Api/conductor/update";
+
 export default function CollapsibleTable() {
-  const [conductors, setConductors] = useState<Conductor[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [deleteConductorId, setDeleteConductorId] = useState<number>(0);
-  const [deleteConductorName, setDeleteConductorName] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [conductors, setConductors] = useState<Conductor[]>([]);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteConductorId, setDeleteConductorId] = useState<number>(0);
   const [dialogConductor, setDialogConductor] = useState<any | null>(null);
+  const [deleteConductorName, setDeleteConductorName] = useState<string>("");
+
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   useEffect(() => {

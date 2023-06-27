@@ -21,39 +21,43 @@ import {
   Button,
   Snackbar,
 } from "@mui/material";
+import Row from "./Row";
+import { Client } from "@/types";
+import { Container } from "../TableStyle/styles";
+import { useMediaQuery } from "react-responsive";
+import DialogError from "../../Utils/Dialog/Error/page";
+import DialogLoading from "../../Utils/Dialog/Loading/page";
+import { formFieldsClient } from "../../Form/FormFields/client";
+
+// Icons
+import AddIcon from "@mui/icons-material/Add";
+import PlaceIcon from "@mui/icons-material/Place";
+import BadgeIcon from "@mui/icons-material/Badge";
 import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import AddIcon from "@mui/icons-material/Add";
-import getAllClients from "../../Api/client";
-import deleteClient from "../../Api/client/delete";
-import newClient from "../../Api/client/add";
-import updateClient from "../../Api/client/update";
-import { Client } from "@/types";
-import DialogLoading from "../../Utils/Dialog/Loading/page";
-import DialogError from "../../Utils/Dialog/Error/page";
-import { useMediaQuery } from "react-responsive";
-import { Container } from "../TableStyle/styles";
-import Row from "./Row";
-import { formFieldsClient } from "../../Form/FormFields/client";
-import BadgeIcon from "@mui/icons-material/Badge";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
-import PlaceIcon from "@mui/icons-material/Place";
+
+// Functions
+import getAllClients from "../../Api/client";
+import newClient from "../../Api/client/add";
+import deleteClient from "../../Api/client/delete";
+import updateClient from "../../Api/client/update";
 
 export default function CollapsibleTable() {
-  const [clients, setClients] = useState<Client[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [deleteClientId, setDeleteClientId] = useState<number>(0);
-  const [deleteClientName, setDeleteClientName] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [clients, setClients] = useState<Client[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteClientId, setDeleteClientId] = useState<number>(0);
   const [dialogClient, setDialogClient] = useState<any | null>(null);
+  const [deleteClientName, setDeleteClientName] = useState<string>("");
 
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 

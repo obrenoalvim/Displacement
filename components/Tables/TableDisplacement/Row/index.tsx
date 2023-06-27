@@ -14,21 +14,27 @@ import {
   Typography,
 } from "@mui/material";
 import { useMediaQuery } from "react-responsive";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+
+// Icons
 import DeleteIcon from "@mui/icons-material/Delete";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import DriveEtaIcon from "@mui/icons-material/DriveEta";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import EmojiFlagsIcon from "@mui/icons-material/EmojiFlags";
-import AssistantPhotoIcon from "@mui/icons-material/AssistantPhoto";
-import DriveEtaIcon from "@mui/icons-material/DriveEta";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Displacement, Client, Vehicle, Conductor } from "@/types";
-import getConductor from "../../../Api/conductor/conductor";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import AssistantPhotoIcon from "@mui/icons-material/AssistantPhoto";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+
+// Functions
 import getClient from "../../../Api/client/client";
 import getVehicle from "../../../Api/vehicle/vehicle";
+import getConductor from "../../../Api/conductor/conductor";
+
+// Types
+import { Displacement, Client, Vehicle, Conductor } from "@/types";
 
 interface Props {
   row: Displacement;

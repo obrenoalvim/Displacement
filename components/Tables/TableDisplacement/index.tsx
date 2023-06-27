@@ -12,7 +12,6 @@ import {
   TablePagination,
   TextField,
   InputAdornment,
-  Grid,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -22,52 +21,56 @@ import {
   Snackbar,
   MenuItem,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import getAllDisplacements from "../../Api/displacement";
-import deleteDisplacement from "../../Api/displacement/delete";
-import newDisplacement from "../../Api/displacement/add";
-import updateDisplacement from "../../Api/displacement/update";
-import DialogLoading from "../../Utils/Dialog/Loading/page";
-import DialogError from "../../Utils/Dialog/Error/page";
-import { useMediaQuery } from "react-responsive";
-import { Container } from "../TableStyle/styles";
 import Row from "./Row";
-import getAllVehicles from "@/components/Api/vehicle";
-import getAllConductors from "@/components/Api/conductor";
-import getAllClients from "@/components/Api/client";
-import { Client, Vehicle, Conductor, Displacement } from "@/types";
+import { Container } from "../TableStyle/styles";
+import { useMediaQuery } from "react-responsive";
 import { formFieldsDisplacement } from "../../Form/FormFields/displacement";
 
-import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
+// Icons
 import NotesIcon from "@mui/icons-material/Notes";
 import StartIcon from "@mui/icons-material/Start";
+import SearchIcon from "@mui/icons-material/Search";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
-
+import DialogError from "../../Utils/Dialog/Error/page";
+import DialogLoading from "../../Utils/Dialog/Loading/page";
+import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import FormatAlignJustifyIcon from "@mui/icons-material/FormatAlignJustify";
 
+// Functions
+import getAllClients from "@/components/Api/client";
+import getAllVehicles from "@/components/Api/vehicle";
+import newDisplacement from "../../Api/displacement/add";
+import getAllDisplacements from "../../Api/displacement";
+import getAllConductors from "@/components/Api/conductor";
+import updateDisplacement from "../../Api/displacement/update";
+import deleteDisplacement from "../../Api/displacement/delete";
+
+// Types
+import { Client, Vehicle, Conductor, Displacement } from "@/types";
+
 export default function CollapsibleTable() {
-  const [displacements, setDisplacements] = useState<Displacement[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [deleteDisplacementId, setDeleteDisplacementId] = useState<number>(0);
-  const [deleteDisplacementName, setDeleteDisplacementName] =
-    useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [conductors, setConductors] = useState<Conductor[]>([]);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [displacements, setDisplacements] = useState<Displacement[]>([]);
+  const [deleteDisplacementId, setDeleteDisplacementId] = useState<number>(0);
   const [dialogDisplacement, setDialogDisplacement] = useState<any | null>(
     null
   );
-  const [clients, setClients] = useState<Client[]>([]);
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [conductors, setConductors] = useState<Conductor[]>([]);
-  const [isEditing, setIsEditing] = useState(false);
+  const [deleteDisplacementName, setDeleteDisplacementName] =
+    useState<string>("");
 
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
@@ -297,11 +300,6 @@ export default function CollapsibleTable() {
                 <StartIcon fontSize="small" className="icon" />
                 <strong>Início</strong>
               </TableCell>
-              {/* <TableCell>
-              <DoneAllIcon fontSize="small" className="icon" />
-                <strong>Fim</strong>
-              </TableCell> */}
-
               {!isMobile && (
                 <TableCell>
                   <DoneAllIcon fontSize="small" className="icon" />

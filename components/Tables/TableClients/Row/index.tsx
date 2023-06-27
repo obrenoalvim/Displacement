@@ -8,17 +8,18 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import DeleteIcon from "@mui/icons-material/Delete";
+
+// Icons
 import EditIcon from "@mui/icons-material/Edit";
-import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import HouseIcon from "@mui/icons-material/House";
+import DeleteIcon from "@mui/icons-material/Delete";
+import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import HolidayVillageIcon from "@mui/icons-material/HolidayVillage";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 interface Props {
   row: Client;
