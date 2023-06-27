@@ -25,5 +25,7 @@ export default async function newConductor(displacement: Displacement) {
 
   const responseJson = await response.json();
 
+  console.log(responseJson);
+
   return responseJson;
 }

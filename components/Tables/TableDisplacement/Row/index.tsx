@@ -1,7 +1,10 @@
-import { Displacement } from "@/types";
+import { useState } from "react";
+import { format } from "date-fns";
 import {
   Box,
   Collapse,
+  Dialog,
+  DialogContent,
   IconButton,
   Table,
   TableBody,
@@ -10,7 +13,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -19,7 +21,15 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ChecklistIcon from "@mui/icons-material/Checklist";
 import EmojiFlagsIcon from "@mui/icons-material/EmojiFlags";
 import AssistantPhotoIcon from "@mui/icons-material/AssistantPhoto";
-import { format } from "date-fns";
+import DriveEtaIcon from "@mui/icons-material/DriveEta";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+
+import { Displacement, Client, Vehicle, Conductor } from "@/types";
+import getConductor from "../../../Api/conductor/conductor";
+import getClient from "../../../Api/client/client";
+import getVehicle from "../../../Api/vehicle/vehicle";
 
 interface Props {
   row: Displacement;
@@ -30,6 +40,14 @@ interface Props {
 export default function Row(props: Props) {
   const { row, onDelete, onEdit } = props;
   const [open, setOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedEntity, setSelectedEntity] = useState<{
+    type: "conductor" | "client" | "vehicle" | "";
+    data: Conductor | Client | Vehicle | null;
+  }>({
+    type: "",
+    data: null,
+  });
 
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
@@ -39,6 +57,73 @@ export default function Row(props: Props) {
 
   const handleEdit = () => {
     onEdit(row);
+  };
+
+  const handleUserDetails = async (
+    id: number,
+    type: "conductor" | "client" | "vehicle"
+  ) => {
+    let entityData = null;
+
+    switch (type) {
+      case "conductor":
+        entityData = await getConductor(id);
+        break;
+      case "client":
+        entityData = await getClient(id);
+        break;
+      case "vehicle":
+        entityData = await getVehicle(id);
+        break;
+      default:
+        break;
+    }
+
+    setSelectedEntity({
+      type,
+      data: entityData,
+    });
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setSelectedEntity({
+      type: "",
+      data: null,
+    });
+    setDialogOpen(false);
+  };
+
+  const renderEntityDialogContent = () => {
+    if (!selectedEntity.data) {
+      return <Typography>Não encontrado ou excluído</Typography>;
+    }
+
+    switch (selectedEntity.type) {
+      case "conductor":
+        return (
+          <>
+            <Typography variant="h6">Detalhes do Condutor:</Typography>
+            <Typography>{selectedEntity.data.nome}</Typography>
+          </>
+        );
+      case "client":
+        return (
+          <>
+            <Typography variant="h6">Detalhes do Cliente:</Typography>
+            <Typography>{selectedEntity.data.nome}</Typography>
+          </>
+        );
+      case "vehicle":
+        return (
+          <>
+            <Typography variant="h6">Detalhes do Veículo:</Typography>
+            <Typography>{selectedEntity.data.placa}</Typography>
+          </>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -56,16 +141,17 @@ export default function Row(props: Props) {
 
         <TableCell>{row.motivo}</TableCell>
         <TableCell>
-          {format(new Date(row.inicioDeslocamento), "dd/mm/yyyy")}
+          {format(new Date(row.inicioDeslocamento), "dd/MM/yyyy")}
         </TableCell>
 
         {!isMobile && (
           <TableCell>
             {row.fimDeslocamento == null
               ? "Não encerrado"
-              : format(new Date(row.fimDeslocamento), "dd/mm/yyyy")}
+              : format(new Date(row.fimDeslocamento), "dd/MM/yyyy")}
           </TableCell>
         )}
+
         {!isMobile && <TableCell>{row.observacao}</TableCell>}
 
         <TableCell>
@@ -87,35 +173,71 @@ export default function Row(props: Props) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                Mais informações
-              </Typography>
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
                     <TableCell>
-                      {" "}
+                      <AccountBoxIcon fontSize="small" className="icon" />{" "}
+                      Cliente
+                    </TableCell>
+                    <TableCell>
+                      <AccountCircleIcon fontSize="small" className="icon" />{" "}
+                      Condutor
+                    </TableCell>
+                    <TableCell>
+                      <DriveEtaIcon fontSize="small" className="icon" /> Veículo
+                    </TableCell>
+                    <TableCell>
                       <EmojiFlagsIcon fontSize="small" className="icon" /> Km
                       Inicial
                     </TableCell>
                     <TableCell>
-                      {" "}
-                      <AssistantPhotoIcon
-                        fontSize="small"
-                        className="icon"
-                      />{" "}
+                      <AssistantPhotoIcon fontSize="small" className="icon" />{" "}
                       Km Final
                     </TableCell>
                     <TableCell>
-                      {" "}
                       <ChecklistIcon fontSize="small" className="icon" />{" "}
                       CheckList
                     </TableCell>
                     {isMobile && <TableCell>Nº Habilitação</TableCell>}
+                    <TableCell />
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   <TableRow>
+                    <TableCell>
+                      <IconButton
+                        aria-label="view-client"
+                        onClick={() =>
+                          handleUserDetails(row.idCliente, "client")
+                        }
+                      >
+                        <VisibilityIcon fontSize="small" />
+                      </IconButton>
+                      Ver
+                    </TableCell>
+                    <TableCell>
+                      <IconButton
+                        aria-label="view-conductor"
+                        onClick={() =>
+                          handleUserDetails(row.idCondutor, "conductor")
+                        }
+                      >
+                        <VisibilityIcon fontSize="small" />
+                      </IconButton>
+                      Ver
+                    </TableCell>
+                    <TableCell>
+                      <IconButton
+                        aria-label="view-vehicle"
+                        onClick={() =>
+                          handleUserDetails(row.idVeiculo, "vehicle")
+                        }
+                      >
+                        <VisibilityIcon fontSize="small" />
+                      </IconButton>
+                      Ver
+                    </TableCell>
                     <TableCell>{row.kmInicial}</TableCell>
                     <TableCell>
                       {row.kmFinal != null ? row.kmFinal : "Não encerrado"}
@@ -129,6 +251,9 @@ export default function Row(props: Props) {
           </Collapse>
         </TableCell>
       </TableRow>
+      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+        <DialogContent>{renderEntityDialogContent()}</DialogContent>
+      </Dialog>
     </>
   );
 }

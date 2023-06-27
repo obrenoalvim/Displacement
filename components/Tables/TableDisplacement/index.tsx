@@ -24,7 +24,6 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import AddIcon from "@mui/icons-material/Add";
 import getAllDisplacements from "../../Api/displacement";
 import deleteDisplacement from "../../Api/displacement/delete";
 import newDisplacement from "../../Api/displacement/add";
@@ -42,9 +41,9 @@ import { formFieldsDisplacement } from "../../Form/FormFields/displacement";
 
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import NotesIcon from "@mui/icons-material/Notes";
+import StartIcon from "@mui/icons-material/Start";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
-import StartIcon from "@mui/icons-material/Start";
 
 import FormatAlignJustifyIcon from "@mui/icons-material/FormatAlignJustify";
 
@@ -119,6 +118,13 @@ export default function CollapsibleTable() {
     }
   };
 
+  const fetchAll = () => {
+    fetchData();
+    fetchClients();
+    fetchVehicles();
+    fetchConductors();
+  };
+
   const handleUpdate = async () => {
     setIsUpdating(true);
     try {
@@ -154,17 +160,11 @@ export default function CollapsibleTable() {
         setSnackbarMessage(`O deslocamento foi iniciado com sucesso!`);
       }
       setSnackbarOpen(true);
-      fetchData();
-      fetchClients();
-      fetchVehicles();
-      fetchConductors();
+      fetchAll();
     } catch (error) {
       setSnackbarMessage(`Erro ao salvar deslocamento.`);
       setSnackbarOpen(true);
-      fetchData();
-      fetchClients();
-      fetchVehicles();
-      fetchConductors();
+      fetchAll();
     }
   };
 
@@ -213,25 +213,16 @@ export default function CollapsibleTable() {
       if (response) {
         setSnackbarMessage(`O deslocamento foi excluído com sucesso!`);
         setSnackbarOpen(true);
-        fetchData();
-        fetchClients();
-        fetchVehicles();
-        fetchConductors();
+        fetchAll();
       } else {
         setSnackbarMessage(`Erro ao deletar deslocamento.`);
         setSnackbarOpen(true);
-        fetchData();
-        fetchClients();
-        fetchVehicles();
-        fetchConductors();
+        fetchAll();
       }
     } catch {
       setSnackbarMessage(`Erro ao deletar deslocamento.`);
       setSnackbarOpen(true);
-      fetchData();
-      fetchClients();
-      fetchVehicles();
-      fetchConductors();
+      fetchAll();
     }
   };
 
