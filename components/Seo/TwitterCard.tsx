@@ -8,7 +8,7 @@ export default function TwitterCard() {
         name="twitter:description"
         content="Teste feito para a empresa Secretária Naty. By: Breno Alvim."
       />
-      <meta name="twitter:image" content="https://socialify.git.ci/obrenoalvim/Deslocamento/image?font=Inter&language=1&name=1&owner=1&pattern=Solid&theme=Light" />
+      <meta name="twitter:image" content="https://socialify.git.ci/obrenoalvim/Displacement/image?font=Inter&language=1&name=1&owner=1&pattern=Solid&theme=Light" />
     </>
   );
 }
