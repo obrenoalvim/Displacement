@@ -189,7 +189,7 @@ export default function CollapsibleTable() {
     rowsPerPage -
     Math.min(rowsPerPage, filteredClients.length - page * rowsPerPage);
 
-    function capitalizeFirstLetter(str) {
+    function capitalizeFirstLetter(str: String) {
       return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
