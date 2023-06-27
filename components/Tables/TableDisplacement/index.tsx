@@ -42,7 +42,6 @@ import { formFieldsDisplacement } from "../../Form/FormFields/displacement";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import NotesIcon from "@mui/icons-material/Notes";
 import StartIcon from "@mui/icons-material/Start";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 
 import FormatAlignJustifyIcon from "@mui/icons-material/FormatAlignJustify";

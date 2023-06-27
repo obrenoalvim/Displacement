@@ -285,7 +285,8 @@ export default function CollapsibleTable() {
           <DialogTitle>Confirmação de exclusão</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Tem certeza que deseja excluir o veículo {deleteVehicleName}? Qualquer deslocamento associado a ele também será excluído.
+              Tem certeza que deseja excluir o veículo {deleteVehicleName}?
+              Qualquer deslocamento associado a ele também será excluído.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -299,7 +300,7 @@ export default function CollapsibleTable() {
         </Dialog>
         <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
           <DialogTitle>
-            {dialogVehicle?.id ? "Editar veículo" : "Novo veículo"}
+            {dialogVehicle?.id ? "Editar Veículo" : "Novo Veículo"}
           </DialogTitle>
           <DialogContent>
             <DialogContentText>Preencha os campos abaixo:</DialogContentText>

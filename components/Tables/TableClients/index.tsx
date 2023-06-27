@@ -158,12 +158,16 @@ export default function CollapsibleTable() {
         setSnackbarOpen(true);
         fetchData();
       } else {
-        setSnackbarMessage(`Erro ao deletar cliente ${deleteClientName}. Provavelmente o Cliente está ligado a um Deslocamento em andamento!`);
+        setSnackbarMessage(
+          `Erro ao deletar cliente ${deleteClientName}. Provavelmente o Cliente está ligado a um Deslocamento em andamento!`
+        );
         setSnackbarOpen(true);
         fetchData();
       }
     } catch {
-      setSnackbarMessage(`Erro ao deletar cliente ${deleteClientName}. Provavelmente o Cliente está ligado a um Deslocamento em andamento!`);
+      setSnackbarMessage(
+        `Erro ao deletar cliente ${deleteClientName}. Provavelmente o Cliente está ligado a um Deslocamento em andamento!`
+      );
       setSnackbarOpen(true);
       fetchData();
     }
@@ -189,9 +193,9 @@ export default function CollapsibleTable() {
     rowsPerPage -
     Math.min(rowsPerPage, filteredClients.length - page * rowsPerPage);
 
-    function capitalizeFirstLetter(str: String) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
+  function capitalizeFirstLetter(str: String) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 
   return (
     <Container>
@@ -327,7 +331,7 @@ export default function CollapsibleTable() {
                         [field.id]: capitalizeFirstLetter(e.target.value),
                       }))
                     }
-                    InputLabelProps={{ shrink: true}}
+                    InputLabelProps={{ shrink: true }}
                   />
                 );
               }
