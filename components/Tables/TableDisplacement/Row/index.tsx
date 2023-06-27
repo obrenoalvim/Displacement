@@ -106,20 +106,20 @@ export default function Row(props: Props) {
               Detalhes do Condutor:
             </Typography>
             <Typography>
-              <strong>Nome:</strong> {selectedEntity.data.nome}
+              <strong>Nome:</strong> {(selectedEntity.data as Conductor).nome}
             </Typography>
             <Typography>
               <strong>Nº Habilitação:</strong>{" "}
-              {selectedEntity.data.numeroHabilitacao}
+              {(selectedEntity.data as Conductor).numeroHabilitacao}
             </Typography>
             <Typography>
               <strong>Categoria:</strong>{" "}
-              {selectedEntity.data.catergoriaHabilitacao}
+              {(selectedEntity.data as Conductor).catergoriaHabilitacao}
             </Typography>
             <Typography>
               <strong>Vencimento:</strong>{" "}
               {format(
-                new Date(selectedEntity.data.vencimentoHabilitacao),
+                new Date((selectedEntity.data as Conductor).vencimentoHabilitacao),
                 "dd/MM/yyyy"
               )}
             </Typography>
@@ -131,14 +131,14 @@ export default function Row(props: Props) {
             <Typography variant="h6" style={{ marginBottom: "5px" }}>
               Detalhes do Cliente:
             </Typography>
-            <Typography><strong>Nome: </strong>{selectedEntity.data.nome}</Typography>
-            <Typography><strong>Logradouro: </strong>{selectedEntity.data.logradouro}</Typography>
-            <Typography><strong>Número: </strong>{selectedEntity.data.numero}</Typography>
-            <Typography><strong>Bairro: </strong>{selectedEntity.data.bairro}</Typography>
-            <Typography><strong>Cidade: </strong>{selectedEntity.data.cidade}</Typography>
-            <Typography><strong>Uf: </strong>{selectedEntity.data.uf}</Typography>
-            <Typography><strong>Nº Documento: </strong>{selectedEntity.data.numeroDocumento}</Typography>
-            <Typography><strong>Tipo Documento: </strong>{selectedEntity.data.tipoDocumento}</Typography>
+            <Typography><strong>Nome: </strong>{(selectedEntity.data as Client).nome}</Typography>
+            <Typography><strong>Logradouro: </strong>{(selectedEntity.data as Client).logradouro}</Typography>
+            <Typography><strong>Número: </strong>{(selectedEntity.data as Client).numero}</Typography>
+            <Typography><strong>Bairro: </strong>{(selectedEntity.data as Client).bairro}</Typography>
+            <Typography><strong>Cidade: </strong>{(selectedEntity.data as Client).cidade}</Typography>
+            <Typography><strong>Uf: </strong>{(selectedEntity.data as Client).uf}</Typography>
+            <Typography><strong>Nº Documento: </strong>{(selectedEntity.data as Client).numeroDocumento}</Typography>
+            <Typography><strong>Tipo Documento: </strong>{(selectedEntity.data as Client).tipoDocumento}</Typography>
           </>
         );
       case "vehicle":
@@ -147,10 +147,10 @@ export default function Row(props: Props) {
             <Typography variant="h6" style={{ marginBottom: "5px" }}>
               Detalhes do Veículo:
             </Typography>
-            <Typography><strong>Placa: </strong>{selectedEntity.data.placa}</Typography>
-            <Typography><strong>Marca/Modelo: </strong>{selectedEntity.data.marcaModelo}</Typography>
-            <Typography><strong>Ano Fabricação: </strong>{selectedEntity.data.anoFabricacao}</Typography>
-            <Typography><strong>Km Atual: </strong>{selectedEntity.data.kmAtual}</Typography>
+            <Typography><strong>Placa: </strong>{(selectedEntity.data as Vehicle).placa}</Typography>
+            <Typography><strong>Marca/Modelo: </strong>{(selectedEntity.data as Vehicle).marcaModelo}</Typography>
+            <Typography><strong>Ano Fabricação: </strong>{(selectedEntity.data as Vehicle).anoFabricacao}</Typography>
+            <Typography><strong>Km Atual: </strong>{(selectedEntity.data as Vehicle).kmAtual}</Typography>
           </>
         );
       default:
