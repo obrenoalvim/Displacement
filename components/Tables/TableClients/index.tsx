@@ -158,12 +158,12 @@ export default function CollapsibleTable() {
         setSnackbarOpen(true);
         fetchData();
       } else {
-        setSnackbarMessage(`Erro ao deletar cliente ${deleteClientName}.`);
+        setSnackbarMessage(`Erro ao deletar cliente ${deleteClientName}. Provavelmente o Cliente está ligado a um Deslocamento em andamento!`);
         setSnackbarOpen(true);
         fetchData();
       }
     } catch {
-      setSnackbarMessage(`Erro ao deletar cliente ${deleteClientName}.`);
+      setSnackbarMessage(`Erro ao deletar cliente ${deleteClientName}. Provavelmente o Cliente está ligado a um Deslocamento em andamento!`);
       setSnackbarOpen(true);
       fetchData();
     }

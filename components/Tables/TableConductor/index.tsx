@@ -285,7 +285,7 @@ export default function CollapsibleTable() {
           <DialogTitle>Confirmação de exclusão</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Tem certeza que deseja excluir o condutor {deleteConductorName}?
+              Tem certeza que deseja excluir o condutor {deleteConductorName}? Qualquer deslocamento associado a ele também será excluído.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
